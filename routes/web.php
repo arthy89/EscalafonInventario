@@ -28,6 +28,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('/registros', [App\Http\Controllers\RegistrosController::class, 'index'])->name('registros');
+
+// !Docente
+Route::get('/registar_nuevo', [App\Http\Controllers\DocenteController::class, 'create'])->name('nuevo');
+//!
+
 require __DIR__.'/auth.php';
 
 Auth::routes();
