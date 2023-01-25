@@ -34,6 +34,13 @@ Route::get('/registros', [App\Http\Controllers\RegistrosController::class, 'inde
 Route::get('/registar_nuevo', [App\Http\Controllers\DocenteController::class, 'create'])->name('nuevo');
 //!
 
+// ? CAJAS
+Route::get('/cajas', [App\Http\Controllers\CajaController::class, 'index'])->name('cajas');
+Route::get('/cajas/registrar', [App\Http\Controllers\CajaController::class, 'create'])->name('nueva_caja');
+Route::post('/cajas/registrar/nuevo', [App\Http\Controllers\CajaController::class, 'store'])->name('caja_store');
+Route::get('/cajas/{num_caja}/editar', [App\Http\Controllers\CajaController::class, 'edit'])->name('editar_caja');
+// ?
+
 require __DIR__.'/auth.php';
 
 Auth::routes();

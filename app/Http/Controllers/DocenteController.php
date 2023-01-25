@@ -57,7 +57,21 @@ class DocenteController extends Controller
         $estados = Estado::all();
 
         $leyes = Ley::all();
-        return view('docentes.registrar_docente',compact('instituciones','cargos','estados','leyes'));
+
+        $cajas = DB::table('caja')
+                    ->join('estado', function($join){
+                        $join->on('caja.id_est','=','estado.id_est');
+                    })
+                    ->join('institucion', function($join){
+                        $join->on('caja.id_inst','=','institucion.id_inst');
+                    })
+                    ->join('tipoinst', function($join){
+                        $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
+                    })
+                    ->select('caja.id_caja','caja.caja_num_let','caja.caja_tipo_per','estado.est_name','tipoinst.tipo_inst','institucion.inst_cod_mod','institucion.inst_name','institucion.inst_lugar','caja.caja_obs')
+                    ->orderBy('caja.caja_num_let','asc')->get();
+
+        return view('docentes.registrar_docente',compact('instituciones','cargos','estados','leyes','cajas'));
     }
 
     /**

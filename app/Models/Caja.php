@@ -15,5 +15,5 @@ class Caja extends Model
 
     protected $primaryKey = "id_caja";
 
-    protected $fillable = ['id_caja','caja_name','caja_tipo','id_est','id_inst'];
+    protected $fillable = ['id_caja','caja_num_let','caja_tipo_per','id_est','id_inst','caja_obs'];
 }

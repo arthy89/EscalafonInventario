@@ -313,11 +313,11 @@ return [
             'icon'        => 'fa fa-user-tie',
             'label_color' => 'success',
         ],
-        ['header' => 'account_settings'],
+        ['header' => 'REGISTROS'],
         [
-            'text' => 'profile',
-            'url'  => 'admin/settings',
-            'icon' => 'fas fa-fw fa-user',
+            'text' => 'Cajas',
+            'url'  => 'cajas',
+            'icon' => 'fas fa-fw fa-box',
         ],
         [
             'text' => 'change_password',

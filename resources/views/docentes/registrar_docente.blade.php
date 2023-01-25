@@ -1,7 +1,6 @@
 @extends('adminlte::page')
 
 @section('title', 'Nuevo')
-
 <style>
     input{
        text-transform: uppercase;
@@ -9,10 +8,6 @@
 </style>
 <link href="resources/select2/select2.min.css" rel="stylesheet" />
 @section('content_header')
-    {{-- <h1>Nuevo Docente</h1> --}}
-    @foreach ($instituciones as $inst)
-        {{ $inst->inst_cod_mod}}
-    @endforeach
     <br>
 @stop
 
@@ -141,7 +136,11 @@
                                             </div>
                                             <select class="js-example-basic-single" name="institucion" style="width: 90%">
                                                 @foreach ($instituciones as $inst)
-                                                    <option value="{{ $inst->id_inst}}">{{ $inst->tipo_inst}} - {{ $inst->inst_cod_mod}} - {{ $inst->inst_name}} - {{ $inst->inst_lugar}} </option>
+                                                    @if ($inst->tipo_inst == "SEDE")
+                                                        <option value="{{$inst->id_inst}}">{{ $inst->inst_name}} - {{ $inst->inst_lugar}} - {{ $inst->tipo_inst}}</option>
+                                                    @else
+                                                        <option value="{{ $inst->id_inst}}">{{ $inst->tipo_inst}} - {{ $inst->inst_cod_mod}} - {{ $inst->inst_name}} - {{ $inst->inst_lugar}} </option>
+                                                    @endif
                                                 @endforeach
                                             </select>
 
@@ -244,8 +243,9 @@
                                             </div>
                                             {{-- <input type="text" class="form-control is-invalid" placeholder="Nombres" name="nombre"> --}}
                                             <select class="js-example-basic-single" name="caja" style="width: 90%">
-                                                <option value="AL">Alabama</option>
-                                                <option value="WY">Wyoming</option>
+                                                @foreach ($cajas as $caja)
+                                                    <option value=" {{ $caja->id_caja }} ">{{ $caja->caja_num_let }} - {{ $caja->caja_tipo_per }} {{ $caja->est_name }} - {{ $caja->tipo_inst }} {{ $caja->inst_name }} - {{ $caja->inst_lugar }} </option> 
+                                                @endforeach
                                             </select>
 
                                         </div>
@@ -294,6 +294,21 @@
                                                 <span class="input-group-text"><strong>@</strong></span>
                                             </div>
                                             <input type="text" class="form-control" placeholder="CORREO" name="correo" value="{{old('correo')}}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                {{-- OBSERVACIONES --}}
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="">OBSERVACIONES</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-eye"></i></span>
+                                            </div>
+                                            <textarea class="form-control" name="observaciones" placeholder="OBSERVACIONES REFERENTE AL PERSONAL PERSONAL"  rows="2">{{old('observaciones')}}</textarea>
                                         </div>
                                     </div>
                                 </div>
