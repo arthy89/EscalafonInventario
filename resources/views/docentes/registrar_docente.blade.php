@@ -2,7 +2,7 @@
 
 @section('title', 'Nuevo')
 <style>
-    input{
+    input, textarea {
        text-transform: uppercase;
     }
 </style>

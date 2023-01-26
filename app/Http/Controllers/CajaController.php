@@ -112,7 +112,16 @@ class CajaController extends Controller
     public function edit(Caja $caja)
     {
         //
-        return view('cajas.editar_caja', compact('caja'));
+        
+        $instituciones = DB::table("institucion")
+                        ->join("tipoinst", function($join){
+                            $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
+                        })
+                        ->select("institucion.id_inst","institucion.inst_cod_mod","institucion.inst_name","institucion.inst_lugar","tipoinst.tipo_inst")
+                        ->get();
+        
+        $estados = Estado::all();
+        return view('cajas.editar_caja', compact('caja','estados','instituciones'));
     }
 
     /**
@@ -122,9 +131,20 @@ class CajaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CajaRequest $request, Caja $caja)
     {
         //
+        
+        // return $caja;
+        $caja->update([
+            'caja_num_let' => $request->num_let,
+            'caja_tipo_per' => $request->tipo_personal,
+            'id_est' => $request->estado,
+            'id_inst' => $request->institucion,
+            'caja_obs' => $request->observaciones,
+        ]);
+
+        return redirect()->route('cajas');
     }
 
     /**

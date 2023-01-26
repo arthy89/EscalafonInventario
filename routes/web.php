@@ -38,7 +38,8 @@ Route::get('/registar_nuevo', [App\Http\Controllers\DocenteController::class, 'c
 Route::get('/cajas', [App\Http\Controllers\CajaController::class, 'index'])->name('cajas');
 Route::get('/cajas/registrar', [App\Http\Controllers\CajaController::class, 'create'])->name('nueva_caja');
 Route::post('/cajas/registrar/nuevo', [App\Http\Controllers\CajaController::class, 'store'])->name('caja_store');
-Route::get('/cajas/{num_caja}/editar', [App\Http\Controllers\CajaController::class, 'edit'])->name('editar_caja');
+Route::get('/cajas/{caja}/editar', [App\Http\Controllers\CajaController::class, 'edit'])->name('editar_caja');
+Route::put('/cajas/{caja}/actualizar', [App\Http\Controllers\CajaController::class, 'update'])->name('actualizar_caja');
 // ?
 
 require __DIR__.'/auth.php';

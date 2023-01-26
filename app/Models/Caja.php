@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Http\Requests\CajaRequest;
+
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Caja extends Model
 {

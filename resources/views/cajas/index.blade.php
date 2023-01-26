@@ -30,12 +30,12 @@
                             </div>
                             <div class="card-footer">
                                 @if (@empty($caja->caja_obs))
-                                    <p><b><i class="fas fa-eye"></i> Observaciones:</b> Sin Observaciones</p>
+                                    <p style="text-transform: uppercase;"><b><i class="fas fa-eye"></i> Observaciones:</b> Sin Observaciones</p>
                                 @else
-                                    <p><b><i class="fas fa-eye"></i> Observaciones:</b> {{ $caja->caja_obs }}</p>
+                                    <p style="text-transform: uppercase;"><b><i class="fas fa-eye"></i> Observaciones:</b> {{ $caja->caja_obs }}</p>
                                 @endif
                                 <hr>
-                                <div class="text-right"><button class="btn btn-warning btn-sm" type="submit">Editar</button></div>
+                                <div class="text-right"><a href=" {{ route('editar_caja', $caja->id_caja) }} " class="btn btn-warning">EDITAR</a></div>
                             </div>
                         </div>
                     </form>
