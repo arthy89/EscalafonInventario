@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Route::get('/dashboard', function () {
@@ -28,10 +28,18 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+//TODO CONTEO DE REGISTROS POR PARTES
 Route::get('/registros', [App\Http\Controllers\RegistrosController::class, 'index'])->name('registros');
 
+// TODO LISTADO
+//* ACTIVOS
+Route::get('/activos/opciones', [App\Http\Controllers\RegistrosController::class, 'activos_list_ops'])->name('activos_list_ops');
+
+//! =====================================================================================================
+
 // !Docente
-Route::get('/registar_nuevo', [App\Http\Controllers\DocenteController::class, 'create'])->name('nuevo');
+Route::get('/personal/registar', [App\Http\Controllers\DocenteController::class, 'create'])->name('nuevo');
+Route::post('/personal/registar/nuevo', [App\Http\Controllers\DocenteController::class, 'store'])->name('docente_store');
 //!
 
 // ? CAJAS
@@ -40,7 +48,10 @@ Route::get('/cajas/registrar', [App\Http\Controllers\CajaController::class, 'cre
 Route::post('/cajas/registrar/nuevo', [App\Http\Controllers\CajaController::class, 'store'])->name('caja_store');
 Route::get('/cajas/{caja}/editar', [App\Http\Controllers\CajaController::class, 'edit'])->name('editar_caja');
 Route::put('/cajas/{caja}/actualizar', [App\Http\Controllers\CajaController::class, 'update'])->name('actualizar_caja');
+Route::delete('/cajas/{caja}/eliminar', [App\Http\Controllers\CajaController::class, 'destroy'])->name('eliminar_caja');
 // ?
+
+
 
 require __DIR__.'/auth.php';
 

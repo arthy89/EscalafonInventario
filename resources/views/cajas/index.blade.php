@@ -3,17 +3,21 @@
 @section('title', 'Cajas')
 
 @section('content_header')
-    <a href="{{route('nueva_caja')}}" class="btn btn-primary"><i class="fas fa-plus"></i> &nbsp; Agregar Nueva Caja</a>
+    &nbsp;&nbsp;<a href="{{route('nueva_caja')}}" class="btn btn-success"><i class="fas fa-plus"></i> &nbsp; AGREGAR NUEVA CAJA</a>
 @stop
 
 @section('content')
-    <p>Vemos las cajas </p>
     <div class="container-fluid">
         <div class="content">
             <div class="row">
                 @foreach ($cajas as $caja)
                 <div class="col-md-4">
-                    <form action="">
+                    <form action="{{route('eliminar_caja',$caja->id_caja)}}" method="POST">
+
+                        @csrf
+
+                        @method('delete')
+
                         <div class="card card-primary shadow">
                             <div class="card-header">
                                 <div class="card-title"><strong>CAJA N° {{ $caja->caja_num_let }} - {{ $caja->inst_lugar }}</strong></div>
@@ -35,7 +39,10 @@
                                     <p style="text-transform: uppercase;"><b><i class="fas fa-eye"></i> Observaciones:</b> {{ $caja->caja_obs }}</p>
                                 @endif
                                 <hr>
-                                <div class="text-right"><a href=" {{ route('editar_caja', $caja->id_caja) }} " class="btn btn-warning">EDITAR</a></div>
+                                <div class="text-right">
+                                    <a href=" {{ route('editar_caja', $caja->id_caja) }} " class="btn btn-warning btn-sm"><i class="fas fa-pen"></i> EDITAR</a>
+                                    <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> EDITAR</button>
+                                </div>
                             </div>
                         </div>
                     </form>

@@ -6,7 +6,7 @@
        text-transform: uppercase;
     }
 </style>
-<link href="resources/select2/select2.min.css" rel="stylesheet" />
+<link href="../resources/select2/select2.min.css" rel="stylesheet" />
 @section('content_header')
     <br>
 @stop
@@ -15,10 +15,13 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <form action="">
+                <form action="{{route('docente_store')}}" method="POST">
+
+                    @csrf
+
                     <div class="card card-primary card-outline">
                         <div class="card-header">
-                            <h3><strong><i class="fas fa-edit"></i> Registrar Nuevo</strong></h3>
+                            <h3><strong><i class="fas fa-edit"></i><i class="fas fa-plus"></i> REGISTRAR NUEVO PERSONAL</strong></h3>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -222,7 +225,7 @@
                                             </div>
                                             {{-- <input type="text" class="form-control is-invalid" placeholder="Nombres" name="nombre"> --}}
                                             <select class="js-example-basic-single" name="tipo_cese" style="width: 90%">
-                                                <option value=" ">SELECCIONE EL TIPO DE CESE</option>
+                                                <option value=" ">-- SELECCIONE EL TIPO DE CESE --</option>
                                                 <option value="CESE A SOLICITUD">CESE A SOLICITUD</option>
                                                 <option value="POR LIMITE DE EDAD">POR LIMITE DE EDAD</option>
                                             </select>
@@ -331,7 +334,7 @@
 @stop
 
 @section('js')
-    <script src="resources/select2/select2.min.js"></script>
+    <script src="../resources/select2/select2.min.js"></script>
     <script>
         function validate(evt) {
             var theEvent = evt || window.event;

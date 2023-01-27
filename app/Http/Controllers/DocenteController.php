@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\DocenteRequest;
 use App\Models\Institucion;
 use App\Models\Ley;
 use App\Models\Estado;
@@ -80,9 +81,39 @@ class DocenteController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(DocenteRequest $request)
     {
         //
+        // return $request->all();
+        // $docente_u = Docente::select('id_dcnt')->orderBy('id_dcnt','desc')->first();
+
+        // //!para obtener ultimo id
+        // if($docente_u == null){
+        //     $docente_id=1;
+        // }else{
+        //     $docente_id = $docente_u->id_dcnt + 1;
+        // }
+
+        $docente = Docente::create([
+            'dcnt_dni' => $request->dni,
+            'dcnt_name' => $request->nombres,
+            'dcnt_apell1' => $request->apepaterno,
+            'dcnt_apell2' => $request->apematerno,
+            'dcnt_cel' => $request->celular,
+            'dcnt_email' => $request->correo,
+            'id_car' => $request->cargo,
+            'id_est' => $request->estado,
+            'id_ley' => $request->ley,
+            'id_inst' => $request->institucion,
+            'id_caja' => $request->caja,
+            'usuario' => auth()->user()->name,
+            'dcnt_fec_ces' => $request->fecha,
+            'dcnt_tip_ces' => $request->tipo_cese,
+            'dcnt_rdr' => $request->rdr,
+            'dcnt_obs' => $request->observaciones,
+        ]);
+
+        return redirect()->route('registros');
     }
 
     /**
