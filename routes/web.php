@@ -40,6 +40,9 @@ Route::get('/activos/opciones', [App\Http\Controllers\RegistrosController::class
 // !Docente
 Route::get('/personal/registar', [App\Http\Controllers\DocenteController::class, 'create'])->name('nuevo');
 Route::post('/personal/registar/nuevo', [App\Http\Controllers\DocenteController::class, 'store'])->name('docente_store');
+Route::get('/personal/{docente}/editar', [App\Http\Controllers\DocenteController::class, 'edit'])->name('editar');
+Route::put('/personal/{docente}/actualizar', [App\Http\Controllers\DocenteController::class, 'update'])->name('doconte_actualizar');
+Route::delete('/personal/{docente}/eliminar', [App\Http\Controllers\DocenteController::class, 'destroy'])->name('doconte_eliminar');
 //!
 
 // ? CAJAS

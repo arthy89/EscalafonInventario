@@ -41,7 +41,7 @@
                                 <hr>
                                 <div class="text-right">
                                     <a href=" {{ route('editar_caja', $caja->id_caja) }} " class="btn btn-warning btn-sm"><i class="fas fa-pen"></i> EDITAR</a>
-                                    <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> EDITAR</button>
+                                    <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ELIMINAR</button>
                                 </div>
                             </div>
                         </div>

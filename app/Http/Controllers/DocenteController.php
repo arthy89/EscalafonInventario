@@ -133,9 +133,37 @@ class DocenteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Docente $docente)
     {
         //
+        $instituciones = DB::table("institucion")
+                        ->join("tipoinst", function($join){
+                            $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
+                        })
+                        ->select("institucion.id_inst","institucion.inst_cod_mod","institucion.inst_name","institucion.inst_lugar","tipoinst.tipo_inst")
+                        ->get();
+
+        $cargos = Cargo::all();
+
+        $estados = Estado::all();
+
+        $leyes = Ley::all();
+
+        $cajas = DB::table('caja')
+                    ->join('estado', function($join){
+                        $join->on('caja.id_est','=','estado.id_est');
+                    })
+                    ->join('institucion', function($join){
+                        $join->on('caja.id_inst','=','institucion.id_inst');
+                    })
+                    ->join('tipoinst', function($join){
+                        $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
+                    })
+                    ->select('caja.id_caja','caja.caja_num_let','caja.caja_tipo_per','estado.est_name','tipoinst.tipo_inst','institucion.inst_cod_mod','institucion.inst_name','institucion.inst_lugar','caja.caja_obs')
+                    ->orderBy('caja.caja_num_let','asc')->get();
+
+        // return $docente;
+        return view('docentes.editar_docente',compact('instituciones','cargos','estados','leyes','cajas','docente'));
     }
 
     /**
@@ -145,9 +173,35 @@ class DocenteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(DocenteRequest $request, Docente $docente)
     {
         //
+        // return $request;
+        // return $docente;
+
+        $docente->update([
+            'dcnt_dni' => $request->dni,
+            'dcnt_name' => $request->nombres,
+            'dcnt_apell1' => $request->apepaterno,
+            'dcnt_apell2' => $request->apematerno,
+            'dcnt_cel' => $request->celular,
+            'dcnt_email' => $request->correo,
+            'id_car' => $request->cargo,
+            'id_est' => $request->estado,
+            'id_ley' => $request->ley,
+            'id_inst' => $request->institucion,
+            'id_caja' => $request->caja,
+            'usuario' => auth()->user()->name,
+            'dcnt_fec_ces' => $request->fecha,
+            'dcnt_tip_ces' => $request->tipo_cese,
+            'dcnt_rdr' => $request->rdr,
+            'dcnt_obs' => $request->observaciones,
+        ]);
+
+        if($request->estado == 1){
+            return redirect()->route('activos_list_ops');
+        }
+        
     }
 
     /**
@@ -156,8 +210,13 @@ class DocenteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Docente $docente)
     {
         //
+        // return $docente;
+        $docente->delete();
+        if($docente->id_est == 1){
+            return redirect()->route('activos_list_ops');
+        }
     }
 }

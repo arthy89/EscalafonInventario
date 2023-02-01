@@ -16,13 +16,14 @@
                         REGISTROS PERSONAL ACTIVO
                     </div>
                     <div class="card-body">
-                        <table id="registro" class="table table-striped shadow p-3 mb-5 bg-body rounded mt-4">
-                            <thead class="bg-danger text-white">
+                        <table id="registro" class="table table-striped shadow p-3 mb-5 bg-body rounded mt-4" style="text-transform: uppercase;">
+                            <thead class="bg-lightblue text-white">
                                 <tr>
                                     <th>N°</th>
                                     <th>APELLIDO PATERNO</th>
                                     <th>APELLIDO MATERNO</th>
                                     <th>NOMBRES</th>
+                                    <th>INSTITUCION</th>
                                     <th>OBSERVACIONES</th>
                                     <th>OPCIONES</th>
                                 </tr>
@@ -30,14 +31,15 @@
                             <tbody>
                                 @foreach ($docentes as $docente)
                                     <tr>
-                                        <td>{{ $docente->id_dcnt }}</td>
+                                        <td> {{ $loop->iteration }}</td>
                                         {{-- apell paterno --}}
                                         <td>{{ $docente->dcnt_apell1 }}</td>
                                         {{-- materno --}}
                                         <td>{{ $docente->dcnt_apell2 }}</td>
                                         {{-- nombres --}}
                                         <td>{{ $docente->dcnt_name }}</td>
-                                        {{--  --}}
+                                        <td>{{ $docente->tipo_inst }} {{ $docente->inst_name }} - {{ $docente->inst_lugar }}</td>
+                                        {{-- observaciones --}}
                                         <td>
                                             @if(empty($docente->dcnt_obs))
                                                 -
@@ -46,20 +48,17 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <form action="{{--route('eliminar_registro', $registro)--}}" method="POST">
-                                                {{-- @csrf
-                                                @method('delete') --}}
-                                                <a href="{{-- route('editar_registro', $registro->id_rr) --}}" class="btn btn-warning btn-sm">Editar</a>&nbsp<a href="{{--route('accion', $registro->id_rr) --}}" class="btn btn-danger btn-sm">Acción</a>
-                                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                            <form action="{{route('doconte_eliminar', $docente->id_dcnt)}}" method="POST">
+                                                @csrf
+                                                @method('delete')
+                                                <a href="{{route('editar', $docente->id_dcnt)}}" class="btn btn-warning btn-sm"> <i class="fas fa-pen"></i> Editar</a>&nbsp<a href="{{--route('accion', $registro->id_rr) --}}" class="btn btn-primary btn-sm"><i class="fas fa-table"></i> DETALLES</a>
+                                                <button type="submit" class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i> ELIMINAR</button>
                                             </form>
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
-                    </div>
-                    <div class="card-footer">
-                        xd
                     </div>
                 </div>
             </div>
