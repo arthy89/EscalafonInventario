@@ -248,9 +248,18 @@
                                             </div>
                                             {{-- <input type="text" class="form-control is-invalid" placeholder="Nombres" name="nombre"> --}}
                                             <select class="js-example-basic-single" name="caja" style="width: 90%" id="caja">
-                                                @foreach ($cajas as $caja)
-                                                    <option value="{{ $caja->id_caja }}">{{ $caja->caja_num_let }} - {{ $caja->caja_tipo_per }} {{ $caja->est_name }} - {{ $caja->tipo_inst }} {{ $caja->inst_name }} - {{ $caja->inst_lugar }} </option> 
-                                                @endforeach
+                                                <optgroup class="select2-result-selectable" label="ACTIVOS">
+                                                    @foreach ($cajas as $caja)
+                                                        <option value="{{ $caja->id_caja }}">{{ $caja->caja_num_let }} - {{ $caja->caja_tipo_per }} {{ $caja->est_name }} - {{ $caja->tipo_inst }} {{ $caja->inst_name }} - {{ $caja->inst_lugar }} </option> 
+                                                    @endforeach
+                                                </optgroup>
+                                                <optgroup class="select2-result-selectable" label="CESANTES  / PENSIONISTAS / NO LEGIX">
+                                                    @foreach ($caja_c as $cajac)
+                                                        <option value="{{ $cajac->id_caja }}">
+                                                            CAJA N° {{$cajac->caja_num_let}} - {{$cajac->est_name}}
+                                                        </option>
+                                                    @endforeach
+                                                </optgroup>
                                             </select>
 
                                         </div>

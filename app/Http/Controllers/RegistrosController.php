@@ -47,7 +47,35 @@ class RegistrosController extends Controller
         // cantidad de nolegix 
         $total_nolegix = DB::table('docente')->where('id_est',4)->count();
 
-        return view('registros', compact('total_activos','total_cesantes','total_pensionistas','total_nolegix'));
+        $total_t = DB::table('docente')->count();
+
+        return view('registros', compact('total_activos','total_cesantes','total_pensionistas','total_nolegix','total_t'));
+    }
+
+    public function todo_list(){
+        $docentes = DB::table('docente')
+                    ->join('cargo', function($join){
+                        $join->on('docente.id_car','=','cargo.id_car');
+                    })
+                    ->join('estado', function($join){
+                        $join->on('docente.id_est','=','estado.id_est');
+                    })
+                    ->join('ley', function($join){
+                        $join->on('docente.id_ley','=','ley.id_ley');
+                    })
+                    ->join('institucion', function($join){
+                        $join->on('docente.id_inst','=','institucion.id_inst');
+                    })
+                    ->join('caja', function($join){
+                        $join->on('docente.id_caja','=','caja.id_caja');
+                    })
+                    ->join('tipoinst', function($join){
+                        $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
+                    })
+                    ->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
+
+        return view('listas.todo', compact('docentes'));
+
     }
 
     public function activos_list_ops()
@@ -71,13 +99,91 @@ class RegistrosController extends Controller
                     ->join('tipoinst', function($join){
                         $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
                     })
-                    ->where('docente.id_est',1)->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
+                    ->where('docente.id_est',1)->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
         
         // return $docentes;
 
         
         // return $activos = $docentes
         return view('listas.activos.lista_ops', compact('docentes'));
+    }
+
+    public function cesantes_list_ops()
+    {
+        $docentes = DB::table('docente')
+                    ->join('cargo', function($join){
+                        $join->on('docente.id_car','=','cargo.id_car');
+                    })
+                    ->join('estado', function($join){
+                        $join->on('docente.id_est','=','estado.id_est');
+                    })
+                    ->join('ley', function($join){
+                        $join->on('docente.id_ley','=','ley.id_ley');
+                    })
+                    ->join('institucion', function($join){
+                        $join->on('docente.id_inst','=','institucion.id_inst');
+                    })
+                    ->join('caja', function($join){
+                        $join->on('docente.id_caja','=','caja.id_caja');
+                    })
+                    ->join('tipoinst', function($join){
+                        $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
+                    })
+                    ->where('docente.id_est',2)->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
+
+        return view('listas.cesantes.lista_ops', compact('docentes'));
+    }
+
+    public function pensionistas_list_ops()
+    {
+        $docentes = DB::table('docente')
+                    ->join('cargo', function($join){
+                        $join->on('docente.id_car','=','cargo.id_car');
+                    })
+                    ->join('estado', function($join){
+                        $join->on('docente.id_est','=','estado.id_est');
+                    })
+                    ->join('ley', function($join){
+                        $join->on('docente.id_ley','=','ley.id_ley');
+                    })
+                    ->join('institucion', function($join){
+                        $join->on('docente.id_inst','=','institucion.id_inst');
+                    })
+                    ->join('caja', function($join){
+                        $join->on('docente.id_caja','=','caja.id_caja');
+                    })
+                    ->join('tipoinst', function($join){
+                        $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
+                    })
+                    ->where('docente.id_est',3)->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
+
+        return view('listas.pensionistas.lista_ops', compact('docentes'));
+    }
+
+    public function nolegix_list_ops()
+    {
+        $docentes = DB::table('docente')
+                    ->join('cargo', function($join){
+                        $join->on('docente.id_car','=','cargo.id_car');
+                    })
+                    ->join('estado', function($join){
+                        $join->on('docente.id_est','=','estado.id_est');
+                    })
+                    ->join('ley', function($join){
+                        $join->on('docente.id_ley','=','ley.id_ley');
+                    })
+                    ->join('institucion', function($join){
+                        $join->on('docente.id_inst','=','institucion.id_inst');
+                    })
+                    ->join('caja', function($join){
+                        $join->on('docente.id_caja','=','caja.id_caja');
+                    })
+                    ->join('tipoinst', function($join){
+                        $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
+                    })
+                    ->where('docente.id_est',4)->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
+
+        return view('listas.nolegix.lista_ops', compact('docentes'));
     }
 
     /**

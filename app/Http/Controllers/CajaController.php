@@ -36,7 +36,17 @@ class CajaController extends Controller
                     ->orderBy('caja.caja_num_let','asc')->get();
 
         // return $cajas;
-        return view('cajas.index', compact('cajas'));
+
+        // $caja_c = Caja::where('id_inst','=',null)->get();
+
+        $caja_c = DB::table('caja')
+                    ->join('estado', function($join){
+                        $join->on('caja.id_est','=','estado.id_est');
+                    })
+                    ->where('id_inst','=',null)->select('caja.id_caja','caja.caja_num_let','caja.caja_tipo_per','estado.est_name','caja.caja_obs')
+                    ->orderBy('caja.caja_num_let','asc')->get();
+
+        return view('cajas.index', compact('cajas','caja_c'));
     }
 
     /**
@@ -88,7 +98,7 @@ class CajaController extends Controller
             'caja_obs'=> $request->observaciones,
 
         ]);
-
+        // return $request;
         return redirect()->route('cajas');
     }
 
@@ -121,6 +131,9 @@ class CajaController extends Controller
                         ->get();
         
         $estados = Estado::all();
+
+        // return $caja;
+
         return view('cajas.editar_caja', compact('caja','estados','instituciones'));
     }
 

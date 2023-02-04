@@ -210,7 +210,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fas fa-file"></i></span>
                                             </div>
-                                            <input type="text" class="form-control" placeholder="FECHA DEL CESE" name="rdr" value="{{old('rdr')}}">
+                                            <input type="text" class="form-control" placeholder="RDR DEL CESE" name="rdr" value="{{old('rdr')}}">
                                         </div>
                                     </div>
                                 </div>
@@ -228,6 +228,7 @@
                                                 <option value=" ">-- SELECCIONE EL TIPO DE CESE --</option>
                                                 <option value="CESE A SOLICITUD">CESE A SOLICITUD</option>
                                                 <option value="POR LIMITE DE EDAD">POR LIMITE DE EDAD</option>
+                                                <option value="POR FALLECIMIENTO">POR FALLECIMIENTO</option>
                                             </select>
 
                                         </div>
@@ -246,9 +247,22 @@
                                             </div>
                                             {{-- <input type="text" class="form-control is-invalid" placeholder="Nombres" name="nombre"> --}}
                                             <select class="js-example-basic-single" name="caja" style="width: 90%">
-                                                @foreach ($cajas as $caja)
-                                                    <option value=" {{ $caja->id_caja }} ">{{ $caja->caja_num_let }} - {{ $caja->caja_tipo_per }} {{ $caja->est_name }} - {{ $caja->tipo_inst }} {{ $caja->inst_name }} - {{ $caja->inst_lugar }} </option> 
-                                                @endforeach
+                                                <optgroup class="select2-result-selectable" label="ACTIVOS">
+                                                    @foreach ($cajas as $caja)
+                                                        <option value=" {{ $caja->id_caja }} ">CAJA N° {{ $caja->caja_num_let }} - {{ $caja->caja_tipo_per }} - {{ $caja->tipo_inst }} {{ $caja->inst_name }} - {{ $caja->inst_lugar }} 
+                                                        </option> 
+                                                    @endforeach
+                                                </optgroup>
+
+                                                <optgroup class="select2-result-selectable" label="CESANTES  / PENSIONISTAS / NO LEGIX">
+                                                    @foreach ($caja_c as $cajac)
+                                                        <option value="{{ $cajac->id_caja }}">
+                                                            CAJA N° {{$cajac->caja_num_let}} - {{$cajac->est_name}}
+                                                        </option>
+                                                    @endforeach
+                                                </optgroup>
+                                                
+                                                
                                             </select>
 
                                         </div>
@@ -368,9 +382,9 @@
         
             // document.getElementById('textop').innerText = `Seleccionado ${estado_select}`;
             let campos_cese = document.getElementById('campos_cese');
-            if(estado_select == 1 || estado_select == 4){
+            if(estado_select == 1){
                 campos_cese.setAttribute('hidden','');
-            }else if(estado_select == 2 || estado_select == 3){
+            }else{
                 campos_cese.removeAttribute('hidden','');
             }
         }

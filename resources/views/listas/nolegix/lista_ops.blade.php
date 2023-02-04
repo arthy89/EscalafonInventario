@@ -3,26 +3,29 @@
 @section('title', 'Lista Activos')
 
 @section('content_header')
-    <h1>ACTIVOS</h1>
+    <h1>NO LEGIX</h1>
 @stop
 
 @section('content')
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <div class="card card-info card-outline">
+                <div class="card card-purple card-outline">
                     <div class="card-header">
-                        REGISTROS PERSONAL ACTIVO
+                        REGISTROS PERSONAL NO REGISTRADO EN LEGIX
                     </div>
                     <div class="card-body">
                         <table id="registro" class="table table-striped shadow p-3 mb-5 bg-body rounded mt-4" style="text-transform: uppercase;">
-                            <thead class="bg-lightblue text-white">
+                            <thead class="bg-purple">
                                 <tr>
                                     <th>N°</th>
                                     <th>DNI</th>
-                                    <th>APELLIDO Y NOMBRES</th>
-                                    <th>INSTITUCION</th>
-                                    <th>CAJA N°</th>
+                                    <th>APELLIDOS Y NOMBRES</th>
+                                    <th>CAJA N° </th>
+                                    <th>IS. DONDE CESO</th>
+                                    <th>FEC. CESE</th>
+                                    <th>RDR</th>
+                                    <th>TIP. CESE</th>
                                     <th>OBSERVACIONES</th>
                                     <th>OPCIONES</th>
                                 </tr>
@@ -35,10 +38,16 @@
                                         <td>{{ $docente->dcnt_dni }}</td>
                                         {{-- apellidos y nombres --}}
                                         <td>{{ $docente->dcnt_apell1 }} {{ $docente->dcnt_apell2 }} {{ $docente->dcnt_name }}</td>
-                                        {{-- institucion --}}
-                                        <td>{{ $docente->tipo_inst }} {{ $docente->inst_name }} - {{ $docente->inst_lugar }}</td>
                                         {{-- caja --}}
                                         <td>{{ $docente->caja_num_let}}</td>
+                                        {{-- institucion --}}
+                                        <td>{{ $docente->tipo_inst }} {{ $docente->inst_name }} - {{ $docente->inst_lugar }}</td>
+                                        {{-- fecha de cese --}}
+                                        <td>{{ $docente->dcnt_fec_ces }}</td>
+                                        {{-- rdr --}}
+                                        <td>{{ $docente->dcnt_rdr }}</td>
+                                        {{-- tipo de cese --}}
+                                        <td>{{ $docente->dcnt_tip_ces }}</td>
                                         {{-- observaciones --}}
                                         <td>
                                             @if(empty($docente->dcnt_obs))

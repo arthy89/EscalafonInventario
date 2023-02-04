@@ -1,26 +1,28 @@
 @extends('adminlte::page')
 
-@section('title', 'Lista Activos')
+@section('title', 'Registro General')
 
 @section('content_header')
-    <h1>ACTIVOS</h1>
+    <h1>REGISTRO GENERAL</h1>
 @stop
 
 @section('content')
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <div class="card card-info card-outline">
+                <div class="card card-primary card-outline">
                     <div class="card-header">
-                        REGISTROS PERSONAL ACTIVO
+                        TODOS LOS REGISTROS EXISTENTES
                     </div>
                     <div class="card-body">
                         <table id="registro" class="table table-striped shadow p-3 mb-5 bg-body rounded mt-4" style="text-transform: uppercase;">
-                            <thead class="bg-lightblue text-white">
+                            <thead class="bg-primary text-white">
                                 <tr>
                                     <th>N°</th>
                                     <th>DNI</th>
                                     <th>APELLIDO Y NOMBRES</th>
+                                    <th>CARGO</th>
+                                    <th>SITUACION</th>
                                     <th>INSTITUCION</th>
                                     <th>CAJA N°</th>
                                     <th>OBSERVACIONES</th>
@@ -35,6 +37,10 @@
                                         <td>{{ $docente->dcnt_dni }}</td>
                                         {{-- apellidos y nombres --}}
                                         <td>{{ $docente->dcnt_apell1 }} {{ $docente->dcnt_apell2 }} {{ $docente->dcnt_name }}</td>
+                                        {{-- cargo --}}
+                                        <td>{{ $docente->car_name }}</td>
+                                        {{-- situacion --}}
+                                        <td>{{ $docente->est_name }}</td>
                                         {{-- institucion --}}
                                         <td>{{ $docente->tipo_inst }} {{ $docente->inst_name }} - {{ $docente->inst_lugar }}</td>
                                         {{-- caja --}}
@@ -133,4 +139,5 @@
 
         
     </script>
+
 @stop

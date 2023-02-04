@@ -82,7 +82,7 @@
                                                     <span class="input-group-text"><i class="fas fa-user-tie"></i></span>
                                                 </div>
                                                 {{-- <input type="text" class="form-control is-invalid" placeholder="Nombres" name="nombre"> --}}
-                                                <select class="js-example-basic-single" name="estado" style="width: 80%" id="estado">
+                                                <select class="js-example-basic-single" name="estado" style="width: 80%" id="estado" onchange="cambiar()">
                                                     @foreach ($estados as $estado)
                                                         <option value="{{$estado->id_est}}">{{$estado->est_name}}</option>
                                                     @endforeach
@@ -92,14 +92,14 @@
                                     </div>
 
                                     {{-- INSTITUCION --}}
-                                    <div class="col-md-4">
+                                    <div class="col-md-4" id="institucion_2">
                                         <div class="form-group">
                                             <label for="">INSTITUCIÓN</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="fas fa-building"></i></span>
                                                 </div>
-                                                <select class="js-example-basic-single" name="institucion" style="width: 85%" id="institucion">
+                                                <select class="js-example-basic-single" name="institucion" style="width: 85%" id="inst_select" id="institucion">
                                                     @foreach ($instituciones as $inst)
                                                         @if ($inst->tipo_inst == "SEDE")
                                                             <option value="{{$inst->id_inst}}">{{ $inst->inst_name}} - {{ $inst->inst_lugar}} - {{ $inst->tipo_inst}}</option>
@@ -168,5 +168,21 @@
         
 
     </script>
+    <script>
+        function cambiar(){
+            let estado = document.getElementById('estado').value;
+        
+            // document.getElementById('textop').innerText = `Seleccionado ${estado_select}`;
+            let institucion = document.getElementById('institucion_2');
+            let inst_select = document.getElementById('inst_select');
+            if(estado == 1){
+                institucion.removeAttribute('hidden','');
+                inst_select.removeAttribute('disabled','');
+            }else{
+                institucion.setAttribute('hidden','');
+                inst_select.setAttribute('disabled','');
 
+            }
+        }
+    </script>
 @stop

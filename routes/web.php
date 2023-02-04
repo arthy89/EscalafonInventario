@@ -31,9 +31,19 @@ Route::middleware('auth')->group(function () {
 //TODO CONTEO DE REGISTROS POR PARTES
 Route::get('/registros', [App\Http\Controllers\RegistrosController::class, 'index'])->name('registros');
 
+
 // TODO LISTADO
+//* TODO
+Route::get('/todo/opciones', [App\Http\Controllers\RegistrosController::class, 'todo_list'])->name('todo_list');
 //* ACTIVOS
 Route::get('/activos/opciones', [App\Http\Controllers\RegistrosController::class, 'activos_list_ops'])->name('activos_list_ops');
+//* CESANTES
+Route::get('/cesantes/opciones', [App\Http\Controllers\RegistrosController::class, 'cesantes_list_ops'])->name('cesantes_list_ops');
+//* PENSIONISTAS
+Route::get('/pensionistas/opciones', [App\Http\Controllers\RegistrosController::class, 'pensionistas_list_ops'])->name('pensionistas_list_ops');
+//* NOLEGIX
+Route::get('/nolegix/opciones', [App\Http\Controllers\RegistrosController::class, 'nolegix_list_ops'])->name('nolegix_list_ops');
+// TODO LISTADO
 
 //! =====================================================================================================
 
@@ -41,8 +51,11 @@ Route::get('/activos/opciones', [App\Http\Controllers\RegistrosController::class
 Route::get('/personal/registar', [App\Http\Controllers\DocenteController::class, 'create'])->name('nuevo');
 Route::post('/personal/registar/nuevo', [App\Http\Controllers\DocenteController::class, 'store'])->name('docente_store');
 Route::get('/personal/{docente}/editar', [App\Http\Controllers\DocenteController::class, 'edit'])->name('editar');
+//detalles
+Route::get('/personal/{docente}/detalles', [App\Http\Controllers\DocenteController::class, 'show'])->name('docente_detalles');
 Route::put('/personal/{docente}/actualizar', [App\Http\Controllers\DocenteController::class, 'update'])->name('doconte_actualizar');
 Route::delete('/personal/{docente}/eliminar', [App\Http\Controllers\DocenteController::class, 'destroy'])->name('doconte_eliminar');
+
 //!
 
 // ? CAJAS
