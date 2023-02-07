@@ -66,6 +66,11 @@
                             </tbody>
                         </table>
                     </div>
+                    <div class="card-footer">
+                        <div class="text-right">
+                            <a href="{{route('generar_pdf')}}" class="btn btn-success"><i class="fa fa-download"></i> GENERAR PDF</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

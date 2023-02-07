@@ -31,6 +31,9 @@ Route::middleware('auth')->group(function () {
 //TODO CONTEO DE REGISTROS POR PARTES
 Route::get('/registros', [App\Http\Controllers\RegistrosController::class, 'index'])->name('registros');
 
+// !GENERAR PDF
+Route::get('/generar-pdf', [App\Http\Controllers\RegistrosController::class, 'generar_pdf'])->name('generar_pdf');
+
 
 // TODO LISTADO
 //* TODO
