@@ -18,17 +18,7 @@
 
 <body>
     <div class="row">
-        {{-- <div class="row">
-            <div class="col">
-                <img src="{{ asset('resources/img/logo-minedu.png') }}" width="30%">
-            </div>
-            <div class="col">
-                <h3>HOLA MUNDO</h3>
-            </div>
-            <div class="col">
-                <p>xd</p>
-            </div>
-        </div> --}}
+        {{-- CABEZADO --}}
         <table>
             <tr>
                 <td width="180px"><img src="{{ asset('resources/img/logo-minedu.png') }}" width="80%"></td>
@@ -39,7 +29,18 @@
                 <td class="text-right"><img src="{{ asset('resources/img/logo-puno.png') }}" width="40%"></td>
             </tr>
         </table>
+        
         <h5 class=" font-weight-bold text-center">LISTA DE PERSONAL ACTIVO</h5>
+        <br>
+
+        @foreach ($cajas as $caja)
+        @php
+            $i = 0;
+        @endphp
+        <h6 class="font-weight-bold text-center">{{ $caja->tipo_inst }}. {{ $caja->inst_name }} - {{ $caja->inst_lugar }} - {{ $caja->caja_tipo_per }}</h6>
+        <h6 class="font-weight-bold text-left">CAJA N°  {{ $caja->caja_num_let }}</h6>
+
+        {{-- TABLA DE DOCENTES --}}
         <table class="table table-bordered table-sm">
             <thead style="background-color: #D9D9D9; font-size: 12px;" class="text-center">
                 <tr>
@@ -52,26 +53,36 @@
             </thead>
             <tbody>
                 @foreach ($docentes as $docente)
-                    <tr>
-                        <td> {{ $loop->iteration }}</td>
-                        {{-- apellido paterno--}}
-                        <td>{{ $docente->dcnt_apell1 }}</td>
-                        {{-- apellido materno --}}
-                        <td>{{ $docente->dcnt_apell2 }}</td>
-                        {{-- nombres --}}
-                        <td> {{ $docente->dcnt_name }}</td>
-                        {{-- observaciones --}}
-                        <td>
-                            @if(empty($docente->dcnt_obs))
-                                
-                            @else
-                                {{ $docente->dcnt_obs }}
-                            @endif
-                        </td>
-                    </tr>
+                    
+                    @if ($caja->id_caja !== $docente->id_caja)
+                        @continue
+                    @else
+                    
+                        <tr>
+                            <td> {{ $i = $i + 1 }}</td>
+                            {{-- apellido paterno--}}
+                            <td>{{ $docente->dcnt_apell1 }}</td>
+                            {{-- apellido materno --}}
+                            <td>{{ $docente->dcnt_apell2 }}</td>
+                            {{-- nombres --}}
+                            <td> {{ $docente->dcnt_name }}</td>
+                            {{-- observaciones --}}
+                            <td>
+                                @if(empty($docente->dcnt_obs))
+                                    
+                                @else
+                                    {{ $docente->dcnt_obs }}
+                                @endif
+                            </td>
+                        </tr>
+                    @endif
+                    
                 @endforeach
             </tbody>
         </table>
+
+        
+        @endforeach
     </div>
 </body>
 </html>

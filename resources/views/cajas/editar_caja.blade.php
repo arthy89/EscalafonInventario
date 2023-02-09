@@ -99,7 +99,7 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="fas fa-building"></i></span>
                                                 </div>
-                                                <select class="js-example-basic-single" name="institucion" style="width: 85%" id="inst_select" id="institucion">
+                                                <select class="js-example-basic-single" name="institucion" style="width: 85%" id="inst_select">
                                                     @foreach ($instituciones as $inst)
                                                         @if ($inst->tipo_inst == "SEDE")
                                                             <option value="{{$inst->id_inst}}">{{ $inst->inst_name}} - {{ $inst->inst_lugar}} - {{ $inst->tipo_inst}}</option>
@@ -162,11 +162,11 @@
             $('#estado').select2().trigger('change');
 
             // select institucion
-            $('#institucion').val("{{$caja->id_inst}}");
-            $('#institucion').select2().trigger('change');
+            $('#inst_select').val({{$caja->id_inst}});
+            $('#inst_select').select2().trigger('change');
         });
         
-
+    console.log({{$caja->id_inst}});
     </script>
     <script>
         function cambiar(){

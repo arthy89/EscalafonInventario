@@ -26,7 +26,7 @@
                             <hr>
                             {{-- nombres --}}
                             <strong><i class="fas fa-user"></i> APELLIDOS Y NOMBRES</strong>
-                            <p class="text-muted">{{$docente_act[0]->dcnt_name}} {{$docente_act[0]->dcnt_apell1}} {{$docente_act[0]->dcnt_apell2}}</p>
+                            <p class="text-muted">{{$docente_act[0]->dcnt_apell1}} {{$docente_act[0]->dcnt_apell2}} {{$docente_act[0]->dcnt_name}}</p>
                             <hr>
                             <div class="row">
                                 <div class="col-md-4">

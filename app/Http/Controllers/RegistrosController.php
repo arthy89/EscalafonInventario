@@ -274,13 +274,36 @@ class RegistrosController extends Controller
                     ->join('tipoinst', function($join){
                         $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
                     })
-                    ->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
+                    ->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.id_caja','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
         
 
         // view()->share('descargar_pdf',$docentes);
 
-        $pdf = Pdf::loadView('descargar_pdf', ['docentes' => $docentes]);
+        $instituciones = DB::table("institucion")
+                        ->join("tipoinst", function($join){
+                            $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
+                        })
+                        ->select("institucion.id_inst","institucion.inst_cod_mod","institucion.inst_name","institucion.inst_lugar","tipoinst.tipo_inst")
+                        ->get();
+
+        $cajas = DB::table('caja')
+                    ->join('estado', function($join){
+                        $join->on('caja.id_est','=','estado.id_est');
+                    })
+                    ->join('institucion', function($join){
+                        $join->on('caja.id_inst','=','institucion.id_inst');
+                    })
+                    ->join('tipoinst', function($join){
+                        $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
+                    })
+                    ->select('caja.id_caja','caja.caja_num_let','caja.caja_tipo_per','estado.est_name','tipoinst.tipo_inst','institucion.inst_cod_mod','institucion.inst_name','institucion.inst_lugar','caja.caja_obs')
+                    ->orderBy('caja.caja_num_let','asc')->get();
+
+        // return $cajas;
+
+        $pdf = Pdf::loadView('descargar_pdf', array('cajas' => $cajas, 'docentes' => $docentes));
         
+
         //horizontal
         // $pdf->set_paper("A4", "landscape");
         // $pdf->render();
