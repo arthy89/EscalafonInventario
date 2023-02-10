@@ -53,7 +53,7 @@
                                                 {{ $docente->dcnt_obs }}
                                             @endif
                                         </td>
-                                        <td>
+                                        <td width="110px">
                                             <form action="{{route('doconte_eliminar', $docente->id_dcnt)}}" method="POST" class="formulario">
                                                 @csrf
                                                 @method('delete')

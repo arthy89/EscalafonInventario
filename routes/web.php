@@ -32,7 +32,14 @@ Route::middleware('auth')->group(function () {
 Route::get('/registros', [App\Http\Controllers\RegistrosController::class, 'index'])->name('registros');
 
 // !GENERAR PDF
-Route::get('/generar-pdf', [App\Http\Controllers\RegistrosController::class, 'generar_pdf'])->name('generar_pdf');
+//GENERAL
+
+//ACTIVOS
+Route::get('/generar-pdf-activos', [App\Http\Controllers\RegistrosController::class, 'generar_pdf'])->name('generar_pdf');
+//CESANTES
+Route::get('/generar-pdf-cesantes', [App\Http\Controllers\RegistrosController::class, 'generar_pdf_cesantes'])->name('generar_pdf_cesantes');
+//PENSIONISTAS
+Route::get('/generar-pdf-pensionistas', [App\Http\Controllers\RegistrosController::class, 'generar_pdf_pensionistas'])->name('generar_pdf_pensionistas');
 
 
 // TODO LISTADO

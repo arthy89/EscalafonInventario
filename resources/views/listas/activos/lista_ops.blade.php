@@ -47,7 +47,7 @@
                                                 {{ $docente->dcnt_obs }}
                                             @endif
                                         </td>
-                                        <td>
+                                        <td width="110px">
                                             <form action="{{route('doconte_eliminar', $docente->id_dcnt)}}" method="POST" class="formulario">
                                                 @csrf
                                                 @method('delete')
@@ -59,6 +59,11 @@
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
+                    <div class="card-footer">
+                        <div class="text-right">
+                            <a href="{{route('generar_pdf')}}" class="btn btn-success"><i class="fa fa-download"></i> GENERAR PDF</a>
+                        </div>
                     </div>
                 </div>
             </div>

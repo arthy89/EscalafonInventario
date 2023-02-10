@@ -274,17 +274,7 @@ class RegistrosController extends Controller
                     ->join('tipoinst', function($join){
                         $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
                     })
-                    ->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.id_caja','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
-        
-
-        // view()->share('descargar_pdf',$docentes);
-
-        $instituciones = DB::table("institucion")
-                        ->join("tipoinst", function($join){
-                            $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
-                        })
-                        ->select("institucion.id_inst","institucion.inst_cod_mod","institucion.inst_name","institucion.inst_lugar","tipoinst.tipo_inst")
-                        ->get();
+                    ->where('docente.id_est',1)->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.id_caja','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
 
         $cajas = DB::table('caja')
                     ->join('estado', function($join){
@@ -296,19 +286,85 @@ class RegistrosController extends Controller
                     ->join('tipoinst', function($join){
                         $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
                     })
-                    ->select('caja.id_caja','caja.caja_num_let','caja.caja_tipo_per','estado.est_name','tipoinst.tipo_inst','institucion.inst_cod_mod','institucion.inst_name','institucion.inst_lugar','caja.caja_obs')
+                    ->where('caja.id_est',1)->select('caja.id_caja','caja.caja_num_let','caja.caja_tipo_per','estado.est_name','tipoinst.tipo_inst','institucion.inst_cod_mod','institucion.inst_name','institucion.inst_lugar','caja.caja_obs')
                     ->orderBy('caja.caja_num_let','asc')->get();
 
+
         // return $cajas;
+        $pdf = Pdf::loadView('pdf.descargar_pdf', array('cajas' => $cajas, 'docentes' => $docentes));
 
-        $pdf = Pdf::loadView('descargar_pdf', array('cajas' => $cajas, 'docentes' => $docentes));
-        
+        return $pdf->stream("Lista Activos.pdf", [ "Attachment" => true]);
+    }
 
-        //horizontal
-        // $pdf->set_paper("A4", "landscape");
-        // $pdf->render();
+    public function generar_pdf_cesantes()
+    {
+        $docentes = DB::table('docente')
+                    ->join('cargo', function($join){
+                        $join->on('docente.id_car','=','cargo.id_car');
+                    })
+                    ->join('estado', function($join){
+                        $join->on('docente.id_est','=','estado.id_est');
+                    })
+                    ->join('ley', function($join){
+                        $join->on('docente.id_ley','=','ley.id_ley');
+                    })
+                    ->join('institucion', function($join){
+                        $join->on('docente.id_inst','=','institucion.id_inst');
+                    })
+                    ->join('caja', function($join){
+                        $join->on('docente.id_caja','=','caja.id_caja');
+                    })
+                    ->join('tipoinst', function($join){
+                        $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
+                    })
+                    ->where('docente.id_est',2)->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.id_caja','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
 
-        // return view('descargar_pdf', compact('docentes'));
-        return $pdf->stream("mypdf.pdf", [ "Attachment" => true]);
+        $cajas = DB::table('caja')
+                    ->join('estado', function($join){
+                        $join->on('caja.id_est','=','estado.id_est');
+                    })
+                    ->where('caja.id_est',2)->select('caja.id_caja','caja.caja_num_let','caja.caja_tipo_per','estado.est_name','caja.caja_obs')
+                    ->orderBy('caja.caja_num_let','asc')->get();
+
+        $pdf = Pdf::loadView('pdf.descargar_pdf_cesantes', array('cajas' => $cajas, 'docentes' => $docentes));
+        $pdf->set_paper("A4", "landscape");
+
+        return $pdf->stream("Lista Cesantes.pdf", [ "Attachment" => true]);
+    }
+
+    public function generar_pdf_pensionistas()
+    {
+        $docentes = DB::table('docente')
+                    ->join('cargo', function($join){
+                        $join->on('docente.id_car','=','cargo.id_car');
+                    })
+                    ->join('estado', function($join){
+                        $join->on('docente.id_est','=','estado.id_est');
+                    })
+                    ->join('ley', function($join){
+                        $join->on('docente.id_ley','=','ley.id_ley');
+                    })
+                    ->join('institucion', function($join){
+                        $join->on('docente.id_inst','=','institucion.id_inst');
+                    })
+                    ->join('caja', function($join){
+                        $join->on('docente.id_caja','=','caja.id_caja');
+                    })
+                    ->join('tipoinst', function($join){
+                        $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
+                    })
+                    ->where('docente.id_est',3)->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.id_caja','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
+
+        $cajas = DB::table('caja')
+                    ->join('estado', function($join){
+                        $join->on('caja.id_est','=','estado.id_est');
+                    })
+                    ->where('caja.id_est',3)->select('caja.id_caja','caja.caja_num_let','caja.caja_tipo_per','estado.est_name','caja.caja_obs')
+                    ->orderBy('caja.caja_num_let','asc')->get();
+
+        $pdf = Pdf::loadView('pdf.descargar_pdf_pensionistas', array('cajas' => $cajas, 'docentes' => $docentes));
+        $pdf->set_paper("A4", "landscape");
+
+        return $pdf->stream("Lista Pensionistas.pdf", [ "Attachment" => true]);
     }
 }
