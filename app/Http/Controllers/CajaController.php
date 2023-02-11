@@ -87,6 +87,7 @@ class CajaController extends Controller
                             $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
                         })
                         ->select("institucion.id_inst","institucion.inst_cod_mod","institucion.inst_name","institucion.inst_lugar","tipoinst.tipo_inst")
+                        ->orderBy('institucion.inst_name','asc')
                         ->get();
         
         $estados = Estado::all();
@@ -153,6 +154,7 @@ class CajaController extends Controller
                             $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
                         })
                         ->select("institucion.id_inst","institucion.inst_cod_mod","institucion.inst_name","institucion.inst_lugar","tipoinst.tipo_inst")
+                        ->orderBy('institucion.inst_name','asc')
                         ->get();
         
         $estados = Estado::all();

@@ -35,26 +35,12 @@ class DocenteController extends Controller
      */
     public function create()
     {
-        //
-
-        // $puntos = DB::table("modelo")
-        //         ->join("modelopuntos", function($join){
-        //             $join->on("modelo.id_mod", "=", "modelopuntos.id_mod");
-        //         })
-        //         ->join("puntos", function($join){
-        //             $join->on("modelopuntos.id_p", "=", "puntos.id_p");
-        //         })
-        //         ->select("modelo.id_mod", "puntos.id_p", "puntos.p_name", "puntos.p_mt", "puntos.p_svg")
-        //         ->get();
-        
-
-
-        // $instituciones = Institucion::all();
         $instituciones = DB::table("institucion")
                         ->join("tipoinst", function($join){
                             $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
                         })
                         ->select("institucion.id_inst","institucion.inst_cod_mod","institucion.inst_name","institucion.inst_lugar","tipoinst.tipo_inst")
+                        ->orderBy('institucion.inst_name','asc')
                         ->get();
 
         $cargos = Cargo::all();
@@ -185,6 +171,7 @@ class DocenteController extends Controller
                             $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
                         })
                         ->select("institucion.id_inst","institucion.inst_cod_mod","institucion.inst_name","institucion.inst_lugar","tipoinst.tipo_inst")
+                        ->orderBy('institucion.inst_name','asc')
                         ->get();
 
         $cargos = Cargo::all();
