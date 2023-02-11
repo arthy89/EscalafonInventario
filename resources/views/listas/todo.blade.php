@@ -40,7 +40,7 @@
                             <tbody>
                                 @foreach ($docentes as $docente)
                                     <tr>
-                                        <td> {{ $loop->iteration }}</td>
+                                        <td>{{ $loop->iteration }}</td>
                                         {{-- dni --}}
                                         <td>{{ $docente->dcnt_dni }}</td>
                                         {{-- apellidos y nombres --}}
@@ -76,7 +76,7 @@
                     </div>
                     <div class="card-footer">
                         <div class="text-right">
-                            <a href="{{route('generar_pdf')}}" class="btn btn-success"><i class="fa fa-download"></i> GENERAR PDF</a>
+                            <a href="{{route('generar_pdf_todo')}}" class="btn btn-success"><i class="fa fa-download"></i> GENERAR PDF</a>
                         </div>
                     </div>
                 </div>

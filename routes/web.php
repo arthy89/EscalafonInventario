@@ -34,7 +34,7 @@ Route::get('/registros', [App\Http\Controllers\RegistrosController::class, 'inde
 
 // !GENERAR PDF
 //GENERAL
-
+Route::get('/generar-pdf-todo', [App\Http\Controllers\RegistrosController::class, 'generar_pdf_todo'])->name('generar_pdf_todo');
 //ACTIVOS
 Route::get('/generar-pdf-activos', [App\Http\Controllers\RegistrosController::class, 'generar_pdf'])->name('generar_pdf');
 //CESANTES
