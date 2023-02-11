@@ -253,7 +253,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => 'registros',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
@@ -307,24 +307,19 @@ return [
             'label_color' => 'success',
         ],
         [
-            'text'        => 'Agregar Nuevo',
+            'text'        => 'Agregar Nuevo Personal',
             'route'         => 'nuevo',
             // 'icon'        => 'far fa-fw fa-file',
             'icon'        => 'fa fa-user-tie',
             'label_color' => 'success',
         ],
-        ['header' => 'REGISTROS'],
+        ['header' => 'CAJAS'],
         [
             'text' => 'Cajas',
             'url'  => 'cajas',
             'icon' => 'fas fa-fw fa-box',
         ],
-        [
-            'text' => 'change_password',
-            'url'  => 'admin/settings',
-            'icon' => 'fas fa-fw fa-lock',
-        ],
-        ['header' => 'labels'],
+        
     ],
 
     /*

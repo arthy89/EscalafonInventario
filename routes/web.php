@@ -19,7 +19,8 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    // return view('dashboard');
+    return redirect()->route('registros');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -40,6 +41,8 @@ Route::get('/generar-pdf-activos', [App\Http\Controllers\RegistrosController::cl
 Route::get('/generar-pdf-cesantes', [App\Http\Controllers\RegistrosController::class, 'generar_pdf_cesantes'])->name('generar_pdf_cesantes');
 //PENSIONISTAS
 Route::get('/generar-pdf-pensionistas', [App\Http\Controllers\RegistrosController::class, 'generar_pdf_pensionistas'])->name('generar_pdf_pensionistas');
+//NOLEGIX
+Route::get('/generar-pdf-no-legix', [App\Http\Controllers\RegistrosController::class, 'generar_pdf_nolegix'])->name('generar_pdf_nolegix');
 
 
 // TODO LISTADO

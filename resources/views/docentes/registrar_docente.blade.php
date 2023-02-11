@@ -5,6 +5,10 @@
     input, textarea {
        text-transform: uppercase;
     }
+
+    .mayus {
+      text-transform: uppercase;  
+    }
 </style>
 <link href="../resources/select2/select2.min.css" rel="stylesheet" />
 @section('content_header')
@@ -236,7 +240,7 @@
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row" style="text-transform:uppercase">
                                 {{-- CAJA --}}
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -249,14 +253,14 @@
                                             <select class="js-example-basic-single" name="caja" style="width: 90%">
                                                 <optgroup class="select2-result-selectable" label="ACTIVOS">
                                                     @foreach ($cajas as $caja)
-                                                        <option value=" {{ $caja->id_caja }} ">CAJA N° {{ $caja->caja_num_let }} - {{ $caja->caja_tipo_per }} - {{ $caja->tipo_inst }} {{ $caja->inst_name }} - {{ $caja->inst_lugar }} 
+                                                        <option value="{{ $caja->id_caja }}">CAJA N° {{ $caja->caja_num_let }} - {{ $caja->caja_tipo_per }} - {{ $caja->tipo_inst }} {{ $caja->inst_name }} - {{ $caja->inst_lugar }} 
                                                         </option> 
                                                     @endforeach
                                                 </optgroup>
 
-                                                <optgroup class="select2-result-selectable" label="CESANTES  / PENSIONISTAS / NO LEGIX">
+                                                <optgroup class="select2-result-selectable" label="CESANTES  / PENSIONISTAS / NO LEGIX" style="text-transform:uppercase">
                                                     @foreach ($caja_c as $cajac)
-                                                        <option value="{{ $cajac->id_caja }}">
+                                                        <option value="{{ $cajac->id_caja }}" style="text-transform:uppercase">
                                                             CAJA N° {{$cajac->caja_num_let}} - {{$cajac->est_name}}
                                                         </option>
                                                     @endforeach

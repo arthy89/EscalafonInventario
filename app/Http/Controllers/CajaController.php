@@ -14,6 +14,10 @@ use DB;
 
 class CajaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -46,7 +50,28 @@ class CajaController extends Controller
                     ->where('id_inst','=',null)->select('caja.id_caja','caja.caja_num_let','caja.caja_tipo_per','estado.est_name','caja.caja_obs')
                     ->orderBy('caja.caja_num_let','asc')->get();
 
-        return view('cajas.index', compact('cajas','caja_c'));
+        $docentes = DB::table('docente')
+                    ->join('cargo', function($join){
+                        $join->on('docente.id_car','=','cargo.id_car');
+                    })
+                    ->join('estado', function($join){
+                        $join->on('docente.id_est','=','estado.id_est');
+                    })
+                    ->join('ley', function($join){
+                        $join->on('docente.id_ley','=','ley.id_ley');
+                    })
+                    ->join('institucion', function($join){
+                        $join->on('docente.id_inst','=','institucion.id_inst');
+                    })
+                    ->join('caja', function($join){
+                        $join->on('docente.id_caja','=','caja.id_caja');
+                    })
+                    ->join('tipoinst', function($join){
+                        $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
+                    })
+                    ->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.id_caja','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
+
+        return view('cajas.index', compact('cajas','caja_c','docentes'));
     }
 
     /**

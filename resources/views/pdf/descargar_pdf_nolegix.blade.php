@@ -2,7 +2,7 @@
 <html lang="es">
 
 <head>
-    <title>LISTA PENSIONISTAS</title>
+    <title>LISTA NO LEGIX</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -30,7 +30,7 @@
             </tr>
         </table>
         
-        <h5 class=" font-weight-bold text-center">LISTA DE PERSONAL PENSIONISTA > <small>2017</small></h5>
+        <h5 class=" font-weight-bold text-center">LISTA DE PERSONAL NO REGISTRADO EN LEGIX</h5>
         <br>
 
         @foreach ($cajas as $caja)

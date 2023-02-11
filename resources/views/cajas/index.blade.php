@@ -36,6 +36,21 @@
                                 <strong>{{ $caja->est_name }} - {{ $caja->tipo_inst }} {{ $caja->inst_name }}</strong>
                                 <br>
                                 <strong>{{ $caja->caja_tipo_per }}</strong>
+                                <hr>
+                                <small>
+                                    <ol>
+                                        @foreach ($docentes as $docente)
+                                            
+                                            @if ($caja->id_caja !== $docente->id_caja)
+                                                @continue
+                                            @else
+                                                    <li>{{$docente->dcnt_apell1}} {{$docente->dcnt_apell2}}, {{$docente->dcnt_name}}</li>
+                                            @endif
+                                        @endforeach
+                                    </ol>
+                                </small>
+                                
+                                <hr>
                             </div>
                             <div class="card-footer">
                                 @if (@empty($caja->caja_obs))
@@ -85,6 +100,20 @@
                             </div>
                             <div class="card-body">
                                 <strong>{{ $cajac->caja_tipo_per }}</strong>
+                                <hr>
+                                <small>
+                                    <ol>
+                                        @foreach ($docentes as $docente)
+                                            
+                                            @if ($cajac->id_caja !== $docente->id_caja)
+                                                @continue
+                                            @else
+                                                    <li>{{$docente->dcnt_apell1}} {{$docente->dcnt_apell2}}, {{$docente->dcnt_name}}</li>
+                                            @endif
+                                        @endforeach
+                                    </ol>
+                                </small>
+                                <hr>
                             </div>
                             <div class="card-footer">
                                 @if (@empty($cajac->caja_obs))
@@ -108,7 +137,6 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="/css/admin_custom.css">
 @stop
 
 @section('js')

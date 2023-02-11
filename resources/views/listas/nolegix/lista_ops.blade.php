@@ -3,7 +3,16 @@
 @section('title', 'Lista Activos')
 
 @section('content_header')
-    <h1>NO LEGIX</h1>
+    <div class="row">
+        <div class="col-md-6"><h1>NO REGISTRADOS EN LEGIX</h1></div>
+        <div class="col-md-6 text-right">
+            <div class="btn-group">
+                <a href="{{route('registros')}}" class="btn btn-outline-danger"><i class="fa fa-arrow-circle-left "></i> ATRAS</a>
+                <a href="{{route('nuevo')}}" class="btn btn-outline-success"><i class="fa fa-plus "></i> <i class="fa fa-user-tie "></i> AGREGAR NUEVO PERSONAL</a>
+                
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('content')
@@ -68,6 +77,11 @@
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
+                    <div class="card-footer">
+                        <div class="text-right">
+                            <a href="{{route('generar_pdf_nolegix')}}" class="btn btn-success"><i class="fa fa-download"></i> GENERAR PDF</a>
+                        </div>
                     </div>
                 </div>
             </div>
