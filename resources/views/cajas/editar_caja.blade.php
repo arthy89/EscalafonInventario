@@ -67,6 +67,7 @@
                                                     <option value="DOCENTES">DOCENTES</option>
                                                     <option value="ADMINISTRATIVOS">ADMINISTRATIVOS</option>
                                                     <option value="DOCENTES Y ADMINISTRATIVOS">DOCENTES Y ADMINISTRATIVOS</option>
+                                                    <option value="ESPECIALISTAS">ESPECIALISTAS</option>
                                                 </select>
                                             </div>
                                         </div>
