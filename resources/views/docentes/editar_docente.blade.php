@@ -234,6 +234,7 @@
                                                 <option value=" ">-- SELECCIONE EL TIPO DE CESE --</option>
                                                 <option value="CESE A SOLICITUD">CESE A SOLICITUD</option>
                                                 <option value="POR LIMITE DE EDAD">POR LIMITE DE EDAD</option>
+                                                <option value="POR FALLECIMIENTO">POR FALLECIMIENTO</option>
                                             </select>
 
                                         </div>

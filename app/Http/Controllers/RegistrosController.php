@@ -350,7 +350,7 @@ class RegistrosController extends Controller
                     ->join('tipoinst', function($join){
                         $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
                     })
-                    ->where('docente.id_est',2)->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.id_caja','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
+                    ->where('docente.id_est',2)->select('docente.id_caja','docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.id_caja','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
 
         $cajas = DB::table('caja')
                     ->join('estado', function($join){
@@ -358,9 +358,13 @@ class RegistrosController extends Controller
                     })
                     ->where('caja.id_est',2)->select('caja.id_caja','caja.caja_num_let','caja.caja_tipo_per','estado.est_name','caja.caja_obs')
                     ->orderBy('caja.caja_num_let','asc')->get();
+        return $docentes;
+        return view('pdf.descargar_pdf_cesantes', compact('cajas', 'docentes'));
 
         $pdf = Pdf::loadView('pdf.descargar_pdf_cesantes', array('cajas' => $cajas, 'docentes' => $docentes));
         $pdf->set_paper("A4", "landscape");
+
+        // return $docentes;
 
         return $pdf->stream("Lista Cesantes.pdf", [ "Attachment" => true]);
     }

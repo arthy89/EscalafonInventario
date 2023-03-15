@@ -34,66 +34,68 @@
         <br>
 
         @foreach ($cajas as $caja)
-        @php
-            $i = 0;
-        @endphp
-        <h6 class="font-weight-bold text-left">CAJA N° {{ $caja->caja_num_let }}</h6>
+            @php
+                $i = 0;
+            @endphp
+            <h6 class="font-weight-bold text-left">CAJA N° {{ $caja->caja_num_let }}</h6>
 
-        {{-- TABLA DE DOCENTES --}}
-        <table class="table table-bordered table-sm">
-            <thead style="background-color: #D9D9D9; font-size: 12px;" class="text-center">
-                <tr>
-                    <th>N°</th>
-                    <th>IS. DONDE CESO</th>
-                    <th>APELL. PATERNO</th>
-                    <th>APELL. MATERNO</th>
-                    <th>NOMBRES</th>
-                    <th>FEC. CESE</th>
-                    <th>RDR</th>
-                    <th>TIP. CESE</th>
-                    <th>OBSERVACIONES</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($docentes as $docente)
-                    
-                    @if ($caja->id_caja !== $docente->id_caja)
-                        @continue
-                    @else
-                    
-                        <tr>
-                            <td class="text-center">{{ $i = $i + 1 }}</td>
-                            {{-- institucion --}}
-                            <td>{{ $docente->tipo_inst }} {{ $docente->inst_name }} - {{ $docente->inst_lugar }}</td>
-                            {{-- apellidos paterno --}}
-                            <td>{{ $docente->dcnt_apell1 }}</td>
-                            {{-- apellido materno --}}
-                            <td>{{ $docente->dcnt_apell2 }}</td>
-                            {{-- nombres --}}
-                            <td>{{ $docente->dcnt_name }}</td>
-                            {{-- fecha de cese --}}
-                            <td>{{ $docente->dcnt_fec_ces }}</td>
-                            {{-- rdr --}}
-                            <td>{{ $docente->dcnt_rdr }}</td>
-                            {{-- tipo de cese --}}
-                            <td>{{ $docente->dcnt_tip_ces }}</td>
-                            {{-- observaciones --}}
-                            <td>
-                                @if(empty($docente->dcnt_obs))
-                                    
-                                @else
-                                    {{ $docente->dcnt_obs }}
-                                @endif
-                            </td>
-                        </tr>
-                    @endif
-                    
-                @endforeach
-            </tbody>
-        </table>
+            {{-- TABLA DE DOCENTES --}}
+            <table class="table table-bordered table-sm">
+                <thead style="background-color: #D9D9D9; font-size: 12px;" class="text-center">
+                    <tr>
+                        <th>N°</th>
+                        <th>IS. DONDE CESO</th>
+                        <th>APELL. PATERNO</th>
+                        <th>APELL. MATERNO</th>
+                        <th>NOMBRES</th>
+                        <th>FEC. CESE</th>
+                        <th>RDR</th>
+                        <th>TIP. CESE</th>
+                        <th>OBSERVACIONES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($docentes as $docente)
+                        
+                        @if ($caja->id_caja !== $docente->id_caja)
+                            @continue
+                        @else
+                        
+                            <tr>
+                                <td class="text-center">{{ $i = $i + 1 }}</td>
+                                {{-- institucion --}}
+                                <td>{{ $docente->tipo_inst }} {{ $docente->inst_name }} - {{ $docente->inst_lugar }}</td>
+                                {{-- apellidos paterno --}}
+                                <td>{{ $docente->dcnt_apell1 }}</td>
+                                {{-- apellido materno --}}
+                                <td>{{ $docente->dcnt_apell2 }}</td>
+                                {{-- nombres --}}
+                                <td>{{ $docente->dcnt_name }}</td>
+                                {{-- fecha de cese --}}
+                                <td>{{ $docente->dcnt_fec_ces }}</td>
+                                {{-- rdr --}}
+                                <td>{{ $docente->dcnt_rdr }}</td>
+                                {{-- tipo de cese --}}
+                                <td>{{ $docente->dcnt_tip_ces }}</td>
+                                {{-- observaciones --}}
+                                <td>
+                                    @if(empty($docente->dcnt_obs))
+                                        
+                                    @else
+                                        {{ $docente->dcnt_obs }}
+                                    @endif
+                                </td>
+                            </tr>
+                        @endif
+                        
+                    @endforeach
+                </tbody>
+            </table>
 
         
         @endforeach
+
+        
     </div>
 </body>
 </html>
