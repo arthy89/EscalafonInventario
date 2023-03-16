@@ -27,42 +27,39 @@
                             <thead class="bg-lightblue text-white">
                                 <tr>
                                     <th>N°</th>
-                                    <th>DNI</th>
-                                    <th>APELLIDO Y NOMBRES</th>
-                                    <th>INSTITUCION</th>
                                     <th>CAJA N°</th>
+                                    <th>TIPO PER</th>
+                                    <th>ESTADO</th>
                                     <th>OBSERVACIONES</th>
                                     <th>OPCIONES</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($docentes as $docente)
+                                @foreach ($cajas as $caja)
                                     <tr>
+                                        {{-- Num --}}
                                         <td> {{ $loop->iteration }}</td>
-                                        {{-- dni --}}
-                                        <td>{{ $docente->dcnt_dni }}</td>
-                                        {{-- apellidos y nombres --}}
-                                        <td>{{ $docente->dcnt_apell1 }} {{ $docente->dcnt_apell2 }} {{ $docente->dcnt_name }}</td>
-                                        {{-- institucion --}}
-                                        <td>{{ $docente->tipo_inst }} {{ $docente->inst_name }} - {{ $docente->inst_lugar }}</td>
-                                        {{-- caja --}}
-                                        <td>{{ $docente->caja_num_let}}</td>
+                                        {{-- caja num --}}
+                                        <td>{{ $caja->caja_num_let }}</td>
+                                        {{-- tipo per --}}
+                                        <td>{{ $caja->caja_tipo_per }}</td>
+                                        {{-- estado --}}
+                                        <td>{{ $caja->est_name }}</td>
                                         {{-- observaciones --}}
                                         <td>
-                                            @if(empty($docente->dcnt_obs))
+                                            @if(empty($caja->caja_obs))
                                                 -
                                             @else
-                                                {{ $docente->dcnt_obs }}
+                                                {{ $caja->caja_obs }}
                                             @endif
                                         </td>
                                         <td width="110px">
-                                            xd
-                                            {{-- <form action="{{route('doconte_eliminar', $docente->id_dcnt)}}" method="POST" class="formulario">
+                                            <form action="{{route('eliminar_caja', $caja->id_caja)}}" method="POST" class="formulario">
                                                 @csrf
                                                 @method('delete')
-                                                <a href="{{route('editar', $docente->id_dcnt)}}" class="btn btn-warning btn-sm"> <i class="fas fa-pen"></i> </a>&nbsp<a href="{{route('docente_detalles', $docente->id_dcnt)}}" class="btn btn-primary btn-sm"><i class="fas fa-table"></i> </a>
+                                                <a href="{{route('editar_caja', $caja->id_caja)}}" class="btn btn-warning btn-sm"> <i class="fas fa-pen"></i> </a>&nbsp<a href="{{route('detalles_caja', $caja->id_caja)}}" class="btn btn-primary btn-sm"><i class="fas fa-table"></i> </a>
                                                 <button type="submit" class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i> </button>
-                                            </form> --}}
+                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -112,7 +109,7 @@
         <script>
             Swal.fire(
             '¡Eliminado!',
-            'Se eliminó al personal correctamente',
+            'Se eliminó la caja correctamente',
             'success'
             )
         </script>
@@ -124,7 +121,7 @@
             e.preventDefault();
 
             Swal.fire({
-            title: '¿Estás seguro de eliminar al personal?',
+            title: '¿Estás seguro de eliminar la caja?',
             text: "Se eliminará al personal",
             icon: 'warning',
             showCancelButton: true,

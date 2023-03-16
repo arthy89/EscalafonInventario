@@ -95,8 +95,8 @@ class CajaController extends Controller
                 ->join('estado', function($join){
                     $join->on('caja.id_est','=','estado.id_est');
                 })
-                ->select('caja.caja_num_let', 'caja.caja_tipo_per', 'estado.est_name','caja.caja_obs')->get();
-        return $cajas;
+                ->select('id_caja','caja.caja_num_let', 'caja.caja_tipo_per', 'estado.est_name','caja.caja_obs')->get();
+        // return $cajas;
         return view('cajas.listado_caja.caja_todo_list', compact('cajas'));
     }
 
@@ -160,9 +160,31 @@ class CajaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show(Caja $caja){
         //
+        $docentes = DB::table('docente')
+                    ->join('cargo', function($join){
+                        $join->on('docente.id_car','=','cargo.id_car');
+                    })
+                    ->join('estado', function($join){
+                        $join->on('docente.id_est','=','estado.id_est');
+                    })
+                    ->join('ley', function($join){
+                        $join->on('docente.id_ley','=','ley.id_ley');
+                    })
+                    ->join('institucion', function($join){
+                        $join->on('docente.id_inst','=','institucion.id_inst');
+                    })
+                    ->join('caja', function($join){
+                        $join->on('docente.id_caja','=','caja.id_caja');
+                    })
+                    ->join('tipoinst', function($join){
+                        $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
+                    })
+                    ->where('docente.id_caja',$caja->id_caja)->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
+        return $docentes;
+        
+        return view('cajas.detalle_caja');
     }
 
     /**
