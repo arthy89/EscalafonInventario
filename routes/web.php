@@ -80,6 +80,11 @@ Route::put('/cajas/{caja}/actualizar', [App\Http\Controllers\CajaController::cla
 Route::delete('/cajas/{caja}/eliminar', [App\Http\Controllers\CajaController::class, 'destroy'])->name('eliminar_caja');
 // ?
 
+// ? CAJAS - LISTADOS
+//todo
+Route::get('/cajas/registros/todo', [App\Http\Controllers\CajaController::class, 'caja_t_list'])->name('caja_t_list');
+// ?
+
 
 
 require __DIR__.'/auth.php';

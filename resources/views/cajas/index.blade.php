@@ -7,157 +7,171 @@
     }
 </style>
 @section('content_header')
-    &nbsp;&nbsp;<a href="{{route('nueva_caja')}}" class="btn btn-success"><i class="fas fa-plus"></i> &nbsp; AGREGAR NUEVA CAJA</a>
+    <div class="row">
+        <div class="col-md-6"><h1>REGISTRO DE CAJAS</h1></div>
+        <div class="col-md-6 text-right">
+            <div class="btn-group">
+                <a href="{{route('registros')}}" class="btn btn-outline-danger"><i class="fa fa-arrow-circle-left "></i> ATRAS</a>
+                <a href="{{route('nuevo')}}" class="btn btn-outline-success"><i class="fa fa-plus "></i> <i class="fa fa-user-tie "></i> AGREGAR NUEVA CAJA</a>
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('content')
     <div class="container-fluid">
         <div class="content">
-            <h1 class="text-center">ACTIVOS</h1>
+            <h1 class="text-center">TODAS LAS CAJAS REGISTRADAS</h1>
             <div class="row mayus">
-                @foreach ($cajas as $caja)
                 <div class="col-md-4">
-                    <form action="{{route('eliminar_caja',$caja->id_caja)}}" method="POST">
-
-                        @csrf
-
-                        @method('delete')
-                        
-                        <div class="card shadow card-info">
-                            <div class="card-header">
-                                <div class="card-title"><strong>CAJA N° {{ $caja->caja_num_let }} - {{ $caja->inst_lugar }}</strong></div>
-                                <div class="card-tools">
-                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                    <i class="fas fa-minus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <strong>{{ $caja->est_name }} - {{ $caja->tipo_inst }} {{ $caja->inst_name }}</strong>
-                                <br>
-                                <strong>{{ $caja->caja_tipo_per }}</strong>
-                                <hr>
-                                <small>
-                                    <ol>
-                                        @foreach ($docentes as $docente)
-                                            
-                                            @if ($caja->id_caja !== $docente->id_caja)
-                                                @continue
-                                            @else
-                                                    <li>{{$docente->dcnt_apell1}} {{$docente->dcnt_apell2}}, {{$docente->dcnt_name}}</li>
-                                            @endif
-                                        @endforeach
-                                    </ol>
-                                </small>
-                                
-                                <hr>
-                            </div>
-                            <div class="card-footer">
-                                @if (@empty($caja->caja_obs))
-                                    <p style="text-transform: uppercase;"><b><i class="fas fa-eye"></i> Observaciones:</b> Sin Observaciones</p>
-                                @else
-                                    <p style="text-transform: uppercase;"><b><i class="fas fa-eye"></i> Observaciones:</b> {{ $caja->caja_obs }}</p>
-                                @endif
-                                <hr>
-                                <div class="text-right">
-                                    <a href=" {{ route('editar_caja', $caja->id_caja) }} " class="btn btn-warning btn-sm"><i class="fas fa-pen"></i> EDITAR</a>
-                                    <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ELIMINAR</button>
-                                </div>
-                            </div>
+                    <div class="small-box bg-primary">
+                        <div class="inner">
+                            <h3>{{$total_t}}</h3>
+                            <p><h4><strong>Todas las cajas</strong></h4></p>
                         </div>
-                    </form>
+                        <div class="icon">
+                            <i class="fas fa-folder-open"></i>
+                        </div>
+                        <a href="{{route('caja_t_list')}}" class="small-box-footer">
+                        VER REGISTRO <i class="fas fa-arrow-circle-right"></i>
+                        </a>
+                    </div>
                 </div>
-                @endforeach
             </div>
-
-            {{-- cesantes pension nolegix --}}
-            <hr>
-            <h1 class="text-center">CESANTES / PENSIONISTAS / NO LEGIX</h1>
+            <h1 class="text-center">CAJAS EN PARTES</h1>
             <div class="row mayus">
-                @foreach ($caja_c as $cajac)
-                    <div class="col-md-4">
-                    <form action="{{route('eliminar_caja',$cajac->id_caja)}}" method="POST">
-
-                        @csrf
-
-                        @method('delete')
-                        
-                        @if ($cajac->est_name == "CESANTE")
-                            <div class="card shadow card-warning">
-                        @elseif($cajac->est_name == "PENSIONISTA")
-                            <div class="card shadow card-orange">
-                        @elseif($cajac->est_name == "NO LEGIX")
-                            <div class="card shadow card-purple">
-                        @endif
-                        
-                            <div class="card-header">
-                                <div class="card-title"><strong>CAJA N° {{ $cajac->caja_num_let }} - {{ $cajac->est_name }}</strong></div>
-                                <div class="card-tools">
-                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                    <i class="fas fa-minus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <strong>{{ $cajac->caja_tipo_per }}</strong>
-                                <hr>
-                                <small>
-                                    <ol>
-                                        @foreach ($docentes as $docente)
-                                            
-                                            @if ($cajac->id_caja !== $docente->id_caja)
-                                                @continue
-                                            @else
-                                                    <li>{{$docente->dcnt_apell1}} {{$docente->dcnt_apell2}}, {{$docente->dcnt_name}}</li>
-                                            @endif
-                                        @endforeach
-                                    </ol>
-                                </small>
-                                <hr>
-                            </div>
-                            <div class="card-footer">
-                                @if (@empty($cajac->caja_obs))
-                                    <p style="text-transform: uppercase;"><b><i class="fas fa-eye"></i> Observaciones:</b> Sin Observaciones</p>
-                                @else
-                                    <p style="text-transform: uppercase;"><b><i class="fas fa-eye"></i> Observaciones:</b> {{ $cajac->caja_obs }}</p>
-                                @endif
-                                <hr>
-                                <div class="text-right">
-                                    <a href=" {{ route('editar_caja', $cajac->id_caja) }} " class="btn btn-warning btn-sm"><i class="fas fa-pen"></i> EDITAR</a>
-                                    <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ELIMINAR</button>
-                                </div>
-                            </div>
+                {{-- ACTIVOS --}}
+                <div class="col-md-3">
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3>{{$total_activos}}</h3>
+                            <p><h4><strong>ACTIVOS</strong></h4></p>
                         </div>
-                    </form>
+                        <div class="icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <a href="{{route('activos_list_ops')}}" class="small-box-footer">
+                        VER REGISTRO <i class="fas fa-arrow-circle-right"></i>
+                        </a>
+                    </div>
                 </div>
-                @endforeach
+
+                {{-- CESANTES --}}
+                <div class="col-md-3">
+                    <div class="small-box bg-warning">
+                        <div class="inner">
+                            <h3>{{$total_cesantes}}</h3>
+                            <p><h4><strong>CESANTES</strong></h4></p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-user-slash"></i>
+                        </div>
+                        <a href="{{route('cesantes_list_ops')}}" class="small-box-footer">
+                        VER REGISTRO <i class="fas fa-arrow-circle-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                {{-- PENSIONISTA --}}
+                <div class="col-md-3">
+                    <div class="small-box bg-orange">
+                        <div class="inner">
+                            <h3>{{$total_pensionistas}}</h3>
+                            <p><h4><strong>PENSIONISTAS</strong></h4></p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <a href="{{route('pensionistas_list_ops')}}" class="small-box-footer">
+                        VER REGISTRO <i class="fas fa-arrow-circle-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                {{-- NO LEGIX --}}
+                <div class="col-md-3">
+                    <div class="small-box bg-purple">
+                        <div class="inner">
+                            <h3>{{$total_nolegix}}</h3>
+                            <p><h4><strong>NO LEGIX</strong></h4></p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-minus-circle"></i>
+                        </div>
+                        <a href="{{route('nolegix_list_ops')}}" class="small-box-footer">
+                        VER REGISTRO <i class="fas fa-arrow-circle-right"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 @stop
 
 @section('css')
+    {{-- <link rel="stylesheet" href="{{ asset('resources/bootstrap5/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('resources/datatable/dataTables.bootstrap5.min.css')}}"> --}}
 @stop
 
 @section('js')
+    {{-- <script src="{{ asset('resources/jquery351/jquery-3.5.1.js')}}"></script>
+    <script src="{{ asset('resources/datatable/jquery.dataTables.min.js')}}"></script>
+    <script src="{{ asset('resources/datatable/dataTables.bootstrap5.min.js')}}"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#registro').DataTable(
+                {
+                    "language":{
+                        "search":       "Buscar",
+                        "lengthMenu":   "Mostrar _MENU_ registros por página",
+                        "info":         "Mostrando página _PAGE_ de _PAGES_",
+                        "paginate":     {
+                                        "previous":  "Anterior",
+                                        "next":     "Siguiente",
+                                        "first":    "Primero",
+                                        "last":     "Último"
+                        }
+
+                    }
+                }
+            );
+        });
+    </script>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @if (session('eliminar') == 'ok')
+        <script>
+            Swal.fire(
+            '¡Eliminado!',
+            'Se eliminó al personal correctamente',
+            'success'
+            )
+        </script>
+    @endif
+
     <script>
 
-        // let estado = "{{ $caja->est_name }}";
-        // let card = document.getElementById('card');
+        $('.formulario').submit(function(e){
+            e.preventDefault();
 
-        // switch(estado){
-        //     case "ACTIVO": 
-        //     card.classList.add("card-info");
-        //     break;
-        //     case "CESANTE": 
-        //     card.classList.add("card-warning");
-        //     break;
-        //     case "PENSIONISTA": 
-        //     card.classList.add("card-orange");
-        //     break;
-        //     case "NO LEGIX": 
-        //     card.classList.add("card-purple");
-        //     break;
-        // }
-    </script>
+            Swal.fire({
+            title: '¿Estás seguro de eliminar al personal?',
+            text: "Se eliminará al personal",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '¡Si, eliminar!',
+            cancelButtonText: 'Cancelar',
+            }).then((result) => {
+            if (result.isConfirmed) {
+                this.submit();
+            }
+            })
+        });
+
+        
+    </script> --}}
 @stop

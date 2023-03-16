@@ -26,52 +26,78 @@ class CajaController extends Controller
     public function index()
     {
         //
-        $cajas = DB::table('caja')
-                    ->join('estado', function($join){
-                        $join->on('caja.id_est','=','estado.id_est');
-                    })
-                    ->join('institucion', function($join){
-                        $join->on('caja.id_inst','=','institucion.id_inst');
-                    })
-                    ->join('tipoinst', function($join){
-                        $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
-                    })
-                    ->select('caja.id_caja','caja.caja_num_let','caja.caja_tipo_per','estado.est_name','tipoinst.tipo_inst','institucion.inst_cod_mod','institucion.inst_name','institucion.inst_lugar','caja.caja_obs')
-                    ->orderBy('caja.caja_num_let','asc')->get();
+        // $cajas = DB::table('caja')
+        //             ->join('estado', function($join){
+        //                 $join->on('caja.id_est','=','estado.id_est');
+        //             })
+        //             ->join('institucion', function($join){
+        //                 $join->on('caja.id_inst','=','institucion.id_inst');
+        //             })
+        //             ->join('tipoinst', function($join){
+        //                 $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
+        //             })
+        //             ->select('caja.id_caja','caja.caja_num_let','caja.caja_tipo_per','estado.est_name','tipoinst.tipo_inst','institucion.inst_cod_mod','institucion.inst_name','institucion.inst_lugar','caja.caja_obs')
+        //             ->orderBy('caja.caja_num_let','asc')->get();
 
         // return $cajas;
 
         // $caja_c = Caja::where('id_inst','=',null)->get();
 
-        $caja_c = DB::table('caja')
-                    ->join('estado', function($join){
-                        $join->on('caja.id_est','=','estado.id_est');
-                    })
-                    ->where('id_inst','=',null)->select('caja.id_caja','caja.caja_num_let','caja.caja_tipo_per','estado.est_name','caja.caja_obs')
-                    ->orderBy('caja.caja_num_let','asc')->get();
+        // $caja_c = DB::table('caja')
+        //             ->join('estado', function($join){
+        //                 $join->on('caja.id_est','=','estado.id_est');
+        //             })
+        //             ->where('id_inst','=',null)->select('caja.id_caja','caja.caja_num_let','caja.caja_tipo_per','estado.est_name','caja.caja_obs')
+        //             ->orderBy('caja.caja_num_let','asc')->get();
 
-        $docentes = DB::table('docente')
-                    ->join('cargo', function($join){
-                        $join->on('docente.id_car','=','cargo.id_car');
-                    })
-                    ->join('estado', function($join){
-                        $join->on('docente.id_est','=','estado.id_est');
-                    })
-                    ->join('ley', function($join){
-                        $join->on('docente.id_ley','=','ley.id_ley');
-                    })
-                    ->join('institucion', function($join){
-                        $join->on('docente.id_inst','=','institucion.id_inst');
-                    })
-                    ->join('caja', function($join){
-                        $join->on('docente.id_caja','=','caja.id_caja');
-                    })
-                    ->join('tipoinst', function($join){
-                        $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
-                    })
-                    ->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.id_caja','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
+        // $docentes = DB::table('docente')
+        //             ->join('cargo', function($join){
+        //                 $join->on('docente.id_car','=','cargo.id_car');
+        //             })
+        //             ->join('estado', function($join){
+        //                 $join->on('docente.id_est','=','estado.id_est');
+        //             })
+        //             ->join('ley', function($join){
+        //                 $join->on('docente.id_ley','=','ley.id_ley');
+        //             })
+        //             ->join('institucion', function($join){
+        //                 $join->on('docente.id_inst','=','institucion.id_inst');
+        //             })
+        //             ->join('caja', function($join){
+        //                 $join->on('docente.id_caja','=','caja.id_caja');
+        //             })
+        //             ->join('tipoinst', function($join){
+        //                 $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
+        //             })
+        //             ->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.id_caja','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
+        // return $docentes;
 
-        return view('cajas.index', compact('cajas','caja_c','docentes'));
+        // cantidad de activos 
+        $total_activos = DB::table('caja')->where('id_est',1)->count();
+
+        // cantidad de cesantes 
+        $total_cesantes = DB::table('caja')->where('id_est',2)->count();
+
+        // cantidad de pensionistas 
+        $total_pensionistas = DB::table('caja')->where('id_est',3)->count();
+
+        // cantidad de nolegix 
+        $total_nolegix = DB::table('caja')->where('id_est',4)->count();
+
+        $total_t = DB::table('caja')->count();
+
+        // return $total_t;
+        return view('cajas.index', compact('total_activos','total_cesantes','total_pensionistas','total_nolegix','total_t'));
+    }
+
+    public function caja_t_list(){
+        $cajas = DB::table('caja')
+                ->join('estado', function($join){
+                    $join->on('caja.id_est','=','estado.id_est');
+                })
+                ->select('caja.caja_num_let', 'caja.caja_tipo_per', 'estado.est_name','caja.caja_obs')->get();
+        return $cajas;
+        return view('cajas.listado_caja.caja_todo_list', compact('cajas'));
     }
 
     /**

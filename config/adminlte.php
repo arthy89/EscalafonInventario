@@ -307,7 +307,7 @@ return [
             'label_color' => 'success',
         ],
         [
-            'text'        => 'Agregar Nuevo Personal',
+            'text'        => '+ Agregar Nuevo Personal',
             'route'         => 'nuevo',
             // 'icon'        => 'far fa-fw fa-file',
             'icon'        => 'fa fa-user-tie',
@@ -315,7 +315,12 @@ return [
         ],
         ['header' => 'CAJAS'],
         [
-            'text' => 'Cajas',
+            'text' => '+ Agregar Nueva Caja',
+            'route'  => 'nueva_caja',
+            'icon' => 'fas fa-fw fa-box',
+        ],
+        [
+            'text' => 'Ver Cajas',
             'url'  => 'cajas',
             'icon' => 'fas fa-fw fa-box',
         ],
