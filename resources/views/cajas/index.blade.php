@@ -11,8 +11,7 @@
         <div class="col-md-6"><h1>REGISTRO DE CAJAS</h1></div>
         <div class="col-md-6 text-right">
             <div class="btn-group">
-                <a href="{{route('registros')}}" class="btn btn-outline-danger"><i class="fa fa-arrow-circle-left "></i> ATRAS</a>
-                <a href="{{route('nuevo')}}" class="btn btn-outline-success"><i class="fa fa-plus "></i> <i class="fa fa-user-tie "></i> AGREGAR NUEVA CAJA</a>
+                <a href="{{route('nueva_caja')}}" class="btn btn-outline-success"><i class="fa fa-plus "></i> <i class="fa fa-user-tie "></i> AGREGAR NUEVA CAJA</a>
             </div>
         </div>
     </div>
@@ -50,7 +49,7 @@
                         <div class="icon">
                             <i class="fas fa-user-tie"></i>
                         </div>
-                        <a href="{{route('activos_list_ops')}}" class="small-box-footer">
+                        <a href="{{route('caja_a_list')}}" class="small-box-footer">
                         VER REGISTRO <i class="fas fa-arrow-circle-right"></i>
                         </a>
                     </div>
@@ -66,7 +65,7 @@
                         <div class="icon">
                             <i class="fas fa-user-slash"></i>
                         </div>
-                        <a href="{{route('cesantes_list_ops')}}" class="small-box-footer">
+                        <a href="{{route('caja_c_list')}}" class="small-box-footer">
                         VER REGISTRO <i class="fas fa-arrow-circle-right"></i>
                         </a>
                     </div>
@@ -82,7 +81,7 @@
                         <div class="icon">
                             <i class="fas fa-coins"></i>
                         </div>
-                        <a href="{{route('pensionistas_list_ops')}}" class="small-box-footer">
+                        <a href="{{route('caja_p_list')}}" class="small-box-footer">
                         VER REGISTRO <i class="fas fa-arrow-circle-right"></i>
                         </a>
                     </div>
@@ -98,7 +97,7 @@
                         <div class="icon">
                             <i class="fas fa-minus-circle"></i>
                         </div>
-                        <a href="{{route('nolegix_list_ops')}}" class="small-box-footer">
+                        <a href="{{route('caja_nl_list')}}" class="small-box-footer">
                         VER REGISTRO <i class="fas fa-arrow-circle-right"></i>
                         </a>
                     </div>

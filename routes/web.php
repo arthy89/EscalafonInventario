@@ -76,14 +76,22 @@ Route::get('/cajas', [App\Http\Controllers\CajaController::class, 'index'])->nam
 Route::get('/cajas/registrar', [App\Http\Controllers\CajaController::class, 'create'])->name('nueva_caja');
 Route::post('/cajas/registrar/nuevo', [App\Http\Controllers\CajaController::class, 'store'])->name('caja_store');
 Route::get('/cajas/{caja}/editar', [App\Http\Controllers\CajaController::class, 'edit'])->name('editar_caja');
-Route::get('/cajas/{caja}/detalles', [App\Http\Controllers\CajaController::class, 'edit'])->name('editar_caja');
-Route::get('/cajas/{caja}/actualizar', [App\Http\Controllers\CajaController::class, 'show'])->name('detalles_caja');
+Route::put('/cajas/{caja}/actualizar', [App\Http\Controllers\CajaController::class, 'update'])->name('actualizar_caja');
+Route::get('/cajas/{caja}/detalles', [App\Http\Controllers\CajaController::class, 'show'])->name('detalles_caja');
 Route::delete('/cajas/{caja}/eliminar', [App\Http\Controllers\CajaController::class, 'destroy'])->name('eliminar_caja');
 // ?
 
 // ? CAJAS - LISTADOS
 //todo
 Route::get('/cajas/registros/todo', [App\Http\Controllers\CajaController::class, 'caja_t_list'])->name('caja_t_list');
+//activos
+Route::get('/cajas/registros/activos', [App\Http\Controllers\CajaController::class, 'caja_a_list'])->name('caja_a_list');
+//cesantes
+Route::get('/cajas/registros/cesantes', [App\Http\Controllers\CajaController::class, 'caja_c_list'])->name('caja_c_list');
+//pensionistas
+Route::get('/cajas/registros/pensionistas', [App\Http\Controllers\CajaController::class, 'caja_p_list'])->name('caja_p_list');
+//nolegix
+Route::get('/cajas/registros/nolegix', [App\Http\Controllers\CajaController::class, 'caja_nl_list'])->name('caja_nl_list');
 // ?
 
 

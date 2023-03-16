@@ -90,15 +90,14 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="/css/admin_custom.css">
-    <link rel="stylesheet" href="../../resources/bootstrap5/bootstrap.min.css">
-    <link rel="stylesheet" href="../../resources/datatable/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="{{ asset('resources/bootstrap5/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('resources/datatable/dataTables.bootstrap5.min.css')}}">
 @stop
 
 @section('js')
-    <script src="../../resources/jquery351/jquery-3.5.1.js"></script>
-    <script src="../../resources/datatable/jquery.dataTables.min.js"></script>
-    <script src="../../resources/datatable/dataTables.bootstrap5.min.js"></script>
+    <script src="{{ asset('resources/jquery351/jquery-3.5.1.js')}}"></script>
+    <script src="{{ asset('resources/datatable/jquery.dataTables.min.js')}}"></script>
+    <script src="{{ asset('resources/datatable/dataTables.bootstrap5.min.js')}}"></script>
 
     <script>
         $(document).ready(function () {

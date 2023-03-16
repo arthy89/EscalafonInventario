@@ -100,6 +100,54 @@ class CajaController extends Controller
         return view('cajas.listado_caja.caja_todo_list', compact('cajas'));
     }
 
+    public function caja_a_list(){
+        $cajas = DB::table('caja')
+                ->join('estado', function($join){
+                    $join->on('caja.id_est','=','estado.id_est');
+                })
+                ->join('institucion', function($join){
+                    $join->on('caja.id_inst','=','institucion.id_inst');
+                })
+                ->join('tipoinst', function($join){
+                    $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
+                })
+                ->select('caja.id_caja','caja.caja_num_let','caja.caja_tipo_per','estado.est_name','tipoinst.tipo_inst','institucion.inst_cod_mod','institucion.inst_name','institucion.inst_lugar','caja.caja_obs')
+                ->orderBy('caja.caja_num_let','asc')->get();
+        
+        //return $cajas;
+        return view('cajas.listado_caja.caja_activos_list', compact('cajas'));
+    }
+
+    public function caja_c_list(){
+        $cajas = DB::table('caja')
+                ->join('estado', function($join){
+                    $join->on('caja.id_est','=','estado.id_est');
+                })
+                ->where('caja.id_est',2)->select('id_caja','caja.caja_num_let', 'caja.caja_tipo_per', 'estado.est_name','caja.caja_obs')->get();
+        //return $cajas;
+        return view('cajas.listado_caja.caja_cesantes_list', compact('cajas'));
+    }
+
+    public function caja_p_list(){
+        $cajas = DB::table('caja')
+                ->join('estado', function($join){
+                    $join->on('caja.id_est','=','estado.id_est');
+                })
+                ->where('caja.id_est',3)->select('id_caja','caja.caja_num_let', 'caja.caja_tipo_per', 'estado.est_name','caja.caja_obs')->get();
+        //return $cajas;
+        return view('cajas.listado_caja.caja_pensionistas_list', compact('cajas'));
+    }
+
+    public function caja_nl_list(){
+        $cajas = DB::table('caja')
+                ->join('estado', function($join){
+                    $join->on('caja.id_est','=','estado.id_est');
+                })
+                ->where('caja.id_est',4)->select('id_caja','caja.caja_num_let', 'caja.caja_tipo_per', 'estado.est_name','caja.caja_obs')->get();
+        //return $cajas;
+        return view('cajas.listado_caja.caja_nolegix_list', compact('cajas'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -182,9 +230,23 @@ class CajaController extends Controller
                         $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
                     })
                     ->where('docente.id_caja',$caja->id_caja)->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
-        return $docentes;
+
+        $caja_act = DB::table('caja')
+                    ->join('estado', function($join){
+                        $join->on('caja.id_est','=','estado.id_est');
+                    })
+                    ->join('institucion', function($join){
+                        $join->on('caja.id_inst','=','institucion.id_inst');
+                    })
+                    ->join('tipoinst', function($join){
+                        $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
+                    })
+                    ->where('caja.id_caja',$caja->id_caja)->select('caja.caja_num_let','caja.caja_tipo_per', 'estado.id_est','estado.est_name','tipoinst.tipo_inst','institucion.inst_name','institucion.inst_lugar','caja.caja_obs')->get();
+        // return $caja_act[0]->id_est;
+        //return $caja;
+
         
-        return view('cajas.detalle_caja');
+        return view('cajas.detalle_caja', compact('docentes', 'caja_act', 'caja'));
     }
 
     /**

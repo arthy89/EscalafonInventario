@@ -1,14 +1,14 @@
 @extends('adminlte::page')
 
-@section('title', 'Lista Activos')
+@section('title', 'Listado de Cajas')
 
 @section('content_header')
     <div class="row">
-        <div class="col-md-6"><h1>ACTIVOS</h1></div>
+        <div class="col-md-6"><h1>LISTADO GENERAL DE CAJAS</h1></div>
         <div class="col-md-6 text-right">
             <div class="btn-group">
-                <a href="{{route('registros')}}" class="btn btn-outline-danger"><i class="fa fa-arrow-circle-left "></i> ATRAS</a>
-                <a href="{{route('nuevo')}}" class="btn btn-outline-success"><i class="fa fa-plus "></i> <i class="fa fa-user-tie "></i> AGREGAR NUEVO PERSONAL</a>
+                <a href="{{route('cajas')}}" class="btn btn-outline-danger"><i class="fa fa-arrow-circle-left "></i> ATRAS</a>
+                <a href="{{route('nueva_caja')}}" class="btn btn-outline-success"><i class="fa fa-plus "></i> <i class="fa fa-user-tie "></i> AGREGAR NUEVA CAJA</a>
             </div>
         </div>
     </div>
@@ -18,13 +18,13 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <div class="card card-info card-outline">
+                <div class="card card-primary card-outline">
                     <div class="card-header">
-                        REGISTROS PERSONAL ACTIVO
+                        REGISTROS GENERAL DE CAJAS
                     </div>
                     <div class="card-body">
                         <table id="registro" class="table table-striped shadow p-3 mb-5 bg-body rounded mt-4" style="text-transform: uppercase;">
-                            <thead class="bg-lightblue text-white">
+                            <thead class="bg-primary text-white">
                                 <tr>
                                     <th>N°</th>
                                     <th>CAJA N°</th>
