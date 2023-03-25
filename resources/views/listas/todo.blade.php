@@ -38,8 +38,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($docentes as $docente)
-                                    <tr>
+                                @foreach ($docentes->chunk(100) as $chunk)
+                                    @foreach ($chunk as $docente)
+                                        <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         {{-- dni --}}
                                         <td>{{ $docente->dcnt_dni }}</td>
@@ -70,6 +71,7 @@
                                             </form>
                                         </td>
                                     </tr>
+                                    @endforeach
                                 @endforeach
                             </tbody>
                         </table>
