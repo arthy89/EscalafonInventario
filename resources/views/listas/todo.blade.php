@@ -7,7 +7,6 @@
         <div class="col-md-6"><h1>REGISTRO GENERAL</h1></div>
         <div class="col-md-6 text-right">
             <div class="btn-group">
-                <button class="btn btn-outline-danger prueba" type="submit">XD</button>
                 <a href="{{route('registros')}}" class="btn btn-outline-danger"><i class="fa fa-arrow-circle-left "></i> ATRAS</a>
                 <a href="{{route('nuevo')}}" class="btn btn-outline-success"><i class="fa fa-plus "></i> <i class="fa fa-user-tie "></i> AGREGAR NUEVO PERSONAL</a>
             </div>
