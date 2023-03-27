@@ -11,6 +11,7 @@ use App\Models\Docente;
 use App\Models\Cargo;
 use App\Models\Caja;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Yajra\DataTables\DataTables;
 use DB;
 
 
@@ -58,34 +59,62 @@ class RegistrosController extends Controller
         return view('registros', compact('total_activos','total_cesantes','total_pensionistas','total_nolegix','total_t'));
     }
 
-    public function todo_list(){
+    public function todo_list(Request $request){
+        if($request->ajax()){
         $docentes = DB::table('docente')
-                    ->join('cargo', function($join){
-                        $join->on('docente.id_car','=','cargo.id_car');
-                    })
-                    ->join('estado', function($join){
-                        $join->on('docente.id_est','=','estado.id_est');
-                    })
-                    ->join('ley', function($join){
-                        $join->on('docente.id_ley','=','ley.id_ley');
-                    })
-                    ->join('institucion', function($join){
-                        $join->on('docente.id_inst','=','institucion.id_inst');
-                    })
-                    ->join('caja', function($join){
-                        $join->on('docente.id_caja','=','caja.id_caja');
-                    })
-                    ->join('tipoinst', function($join){
-                        $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
-                    })
-                    ->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
+                ->join('cargo', function($join){
+                    $join->on('docente.id_car','=','cargo.id_car');
+                })
+                ->join('estado', function($join){
+                    $join->on('docente.id_est','=','estado.id_est');
+                })
+                ->join('ley', function($join){
+                    $join->on('docente.id_ley','=','ley.id_ley');
+                })
+                ->join('institucion', function($join){
+                    $join->on('docente.id_inst','=','institucion.id_inst');
+                })
+                ->join('caja', function($join){
+                    $join->on('docente.id_caja','=','caja.id_caja');
+                })
+                ->join('tipoinst', function($join){
+                    $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
+                })
+                ->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
+            return DataTables::of($docentes)
+            ->addIndexColumn()
+            ->addColumn('nombres', function($docente){
+                return $docente->dcnt_apell1 .' '. $docente->dcnt_apell2.' '. $docente->dcnt_name ;
+            })
+            ->addColumn('institucion', function($docente){
+                return $docente->tipo_inst .' '. $docente->inst_name .' - '. $docente->inst_lugar;
+            })
+            ->addColumn('action', function($row){
+                $ruta_detalles = route('docente_detalles',$row->id_dcnt);
+                $ruta_eliminar = route('doconte_eliminar',$row->id_dcnt);
+                $ruta_editar = route('editar',$row->id_dcnt);
 
-        return view('listas.todo', compact('docentes'));
+                $form = '<form action="'.$ruta_eliminar.'" method="POST" class="formulario">
+                            '.csrf_field().'
+                            '.method_field("delete").'
+                            <a href="'.$ruta_editar.'" class="btn btn-warning btn-sm"> <i class="fas fa-pen"></i> </a>&nbsp<a href="'.$ruta_detalles.'" class="btn btn-primary btn-sm"><i class="fas fa-table"></i> </a>
+                            
+                            <button type="submit" class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i> </button>
+                        </form>';
+                return $form;
+                
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+        }
+
+        return view('listas.todo');
 
     }
 
-    public function activos_list_ops()
+    public function activos_list_ops(Request $request)
     {
+        if($request->ajax()){
         $docentes = DB::table('docente')
                     ->join('cargo', function($join){
                         $join->on('docente.id_car','=','cargo.id_car');
@@ -106,16 +135,38 @@ class RegistrosController extends Controller
                         $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
                     })
                     ->where('docente.id_est',1)->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
-        
-        // return $docentes;
+            return DataTables::of($docentes)
+            ->addIndexColumn()
+            ->addColumn('nombres', function($docente){
+                return $docente->dcnt_apell1 .' '. $docente->dcnt_apell2.' '. $docente->dcnt_name ;
+            })
+            ->addColumn('institucion', function($docente){
+                return $docente->tipo_inst .' '. $docente->inst_name .' - '. $docente->inst_lugar;
+            })
+            ->addColumn('action', function($row){
+                $ruta_detalles = route('docente_detalles',$row->id_dcnt);
+                $ruta_eliminar = route('doconte_eliminar',$row->id_dcnt);
+                $ruta_editar = route('editar',$row->id_dcnt);
 
-        
-        // return $activos = $docentes
-        return view('listas.activos.lista_ops', compact('docentes'));
+                $form = '<form action="'.$ruta_eliminar.'" method="POST" class="formulario">
+                            '.csrf_field().'
+                            '.method_field("delete").'
+                            <a href="'.$ruta_editar.'" class="btn btn-warning btn-sm"> <i class="fas fa-pen"></i> </a>&nbsp<a href="'.$ruta_detalles.'" class="btn btn-primary btn-sm"><i class="fas fa-table"></i> </a>
+                            
+                            <button type="submit" class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i> </button>
+                        </form>';
+                return $form;
+                
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+        }
+        return view('listas.activos.lista_ops');
     }
 
-    public function cesantes_list_ops()
+    public function cesantes_list_ops(Request $request)
     {
+        if($request->ajax()){
         $docentes = DB::table('docente')
                     ->join('cargo', function($join){
                         $join->on('docente.id_car','=','cargo.id_car');
@@ -136,12 +187,38 @@ class RegistrosController extends Controller
                         $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
                     })
                     ->where('docente.id_est',2)->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
+            return DataTables::of($docentes)
+            ->addIndexColumn()
+            ->addColumn('nombres', function($docente){
+                return $docente->dcnt_apell1 .' '. $docente->dcnt_apell2.' '. $docente->dcnt_name ;
+            })
+            ->addColumn('institucion', function($docente){
+                return $docente->tipo_inst .' '. $docente->inst_name .' - '. $docente->inst_lugar;
+            })
+            ->addColumn('action', function($row){
+                $ruta_detalles = route('docente_detalles',$row->id_dcnt);
+                $ruta_eliminar = route('doconte_eliminar',$row->id_dcnt);
+                $ruta_editar = route('editar',$row->id_dcnt);
 
-        return view('listas.cesantes.lista_ops', compact('docentes'));
+                $form = '<form action="'.$ruta_eliminar.'" method="POST" class="formulario">
+                            '.csrf_field().'
+                            '.method_field("delete").'
+                            <a href="'.$ruta_editar.'" class="btn btn-warning btn-sm"> <i class="fas fa-pen"></i> </a>&nbsp<a href="'.$ruta_detalles.'" class="btn btn-primary btn-sm"><i class="fas fa-table"></i> </a>
+                            
+                            <button type="submit" class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i> </button>
+                        </form>';
+                return $form;
+                
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+        }
+        return view('listas.cesantes.lista_ops');
     }
 
-    public function pensionistas_list_ops()
+    public function pensionistas_list_ops(Request $request)
     {
+        if($request->ajax()){
         $docentes = DB::table('docente')
                     ->join('cargo', function($join){
                         $join->on('docente.id_car','=','cargo.id_car');
@@ -162,12 +239,39 @@ class RegistrosController extends Controller
                         $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
                     })
                     ->where('docente.id_est',3)->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
+            return DataTables::of($docentes)
+            ->addIndexColumn()
+            ->addColumn('nombres', function($docente){
+                return $docente->dcnt_apell1 .' '. $docente->dcnt_apell2.' '. $docente->dcnt_name ;
+            })
+            ->addColumn('institucion', function($docente){
+                return $docente->tipo_inst .' '. $docente->inst_name .' - '. $docente->inst_lugar;
+            })
+            ->addColumn('action', function($row){
+                $ruta_detalles = route('docente_detalles',$row->id_dcnt);
+                $ruta_eliminar = route('doconte_eliminar',$row->id_dcnt);
+                $ruta_editar = route('editar',$row->id_dcnt);
 
-        return view('listas.pensionistas.lista_ops', compact('docentes'));
+                $form = '<form action="'.$ruta_eliminar.'" method="POST" class="formulario">
+                            '.csrf_field().'
+                            '.method_field("delete").'
+                            <a href="'.$ruta_editar.'" class="btn btn-warning btn-sm"> <i class="fas fa-pen"></i> </a>&nbsp<a href="'.$ruta_detalles.'" class="btn btn-primary btn-sm"><i class="fas fa-table"></i> </a>
+                            
+                            <button type="submit" class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i> </button>
+                        </form>';
+                return $form;
+                
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+        }
+
+        return view('listas.pensionistas.lista_ops');
     }
 
-    public function nolegix_list_ops()
+    public function nolegix_list_ops(Request $request)
     {
+        if($request->ajax()){
         $docentes = DB::table('docente')
                     ->join('cargo', function($join){
                         $join->on('docente.id_car','=','cargo.id_car');
@@ -188,8 +292,33 @@ class RegistrosController extends Controller
                         $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
                     })
                     ->where('docente.id_est',4)->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
+            return DataTables::of($docentes)
+            ->addIndexColumn()
+            ->addColumn('nombres', function($docente){
+                return $docente->dcnt_apell1 .' '. $docente->dcnt_apell2.' '. $docente->dcnt_name ;
+            })
+            ->addColumn('institucion', function($docente){
+                return $docente->tipo_inst .' '. $docente->inst_name .' - '. $docente->inst_lugar;
+            })
+            ->addColumn('action', function($row){
+                $ruta_detalles = route('docente_detalles',$row->id_dcnt);
+                $ruta_eliminar = route('doconte_eliminar',$row->id_dcnt);
+                $ruta_editar = route('editar',$row->id_dcnt);
 
-        return view('listas.nolegix.lista_ops', compact('docentes'));
+                $form = '<form action="'.$ruta_eliminar.'" method="POST" class="formulario">
+                            '.csrf_field().'
+                            '.method_field("delete").'
+                            <a href="'.$ruta_editar.'" class="btn btn-warning btn-sm"> <i class="fas fa-pen"></i> </a>&nbsp<a href="'.$ruta_detalles.'" class="btn btn-primary btn-sm"><i class="fas fa-table"></i> </a>
+                            
+                            <button type="submit" class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i> </button>
+                        </form>';
+                return $form;
+                
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+        }
+        return view('listas.nolegix.lista_ops');
     }
 
     /**

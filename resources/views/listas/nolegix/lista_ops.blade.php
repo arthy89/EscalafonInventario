@@ -40,41 +40,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($docentes as $docente)
-                                    <tr>
-                                        <td> {{ $loop->iteration }}</td>
-                                        {{-- dni --}}
-                                        <td>{{ $docente->dcnt_dni }}</td>
-                                        {{-- apellidos y nombres --}}
-                                        <td>{{ $docente->dcnt_apell1 }} {{ $docente->dcnt_apell2 }} {{ $docente->dcnt_name }}</td>
-                                        {{-- caja --}}
-                                        <td>{{ $docente->caja_num_let}}</td>
-                                        {{-- institucion --}}
-                                        <td>{{ $docente->tipo_inst }} {{ $docente->inst_name }} - {{ $docente->inst_lugar }}</td>
-                                        {{-- fecha de cese --}}
-                                        <td>{{ $docente->dcnt_fec_ces }}</td>
-                                        {{-- rdr --}}
-                                        <td>{{ $docente->dcnt_rdr }}</td>
-                                        {{-- tipo de cese --}}
-                                        <td>{{ $docente->dcnt_tip_ces }}</td>
-                                        {{-- observaciones --}}
-                                        <td>
-                                            @if(empty($docente->dcnt_obs))
-                                                -
-                                            @else
-                                                {{ $docente->dcnt_obs }}
-                                            @endif
-                                        </td>
-                                        <td width="110px">
-                                            <form action="{{route('doconte_eliminar', $docente->id_dcnt)}}" method="POST" class="formulario">
-                                                @csrf
-                                                @method('delete')
-                                                <a href="{{route('editar', $docente->id_dcnt)}}" class="btn btn-warning btn-sm"> <i class="fas fa-pen"></i> </a>&nbsp<a href="{{route('docente_detalles', $docente->id_dcnt)}}" class="btn btn-primary btn-sm"><i class="fas fa-table"></i> </a>
-                                                <button type="submit" class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i> </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -98,11 +63,54 @@
     <script src="{{ asset('resources/jquery351/jquery-3.5.1.js')}}"></script>
     <script src="{{ asset('resources/datatable/jquery.dataTables.min.js')}}"></script>
     <script src="{{ asset('resources/datatable/dataTables.bootstrap5.min.js')}}"></script>
+    <script src="{{ asset('resources/sweetalert/sweetalert2@11.js')}}"></script>
 
     <script>
         $(document).ready(function () {
             $('#registro').DataTable(
                 {
+                processing: true,
+                serverSide: true,
+                ajax: "{{route('nolegix_list_ops')}}",
+                columns: [
+                    {
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex', orderable: true, searchable: true
+                    },
+                    {
+                        data: 'dcnt_dni',
+                        name: 'dcnt_dni'
+                    },
+                    {
+                        data: 'nombres',
+                    },
+                    {
+                        data: 'caja_num_let',
+                        name: 'caja_num_let'
+                    },
+                    {
+                        data: 'institucion',
+                    },
+                    {
+                        data: 'dcnt_fec_ces',
+                        name: 'dcnt_fec_ces'
+                    },
+                    {
+                        data: 'dcnt_rdr',
+                        name: 'dcnt_rdr'
+                    },
+                    {
+                        data: 'dcnt_tip_ces',
+                        name: 'dcnt_tip_ces'
+                    },
+                    {
+                        data: 'dcnt_obs',
+                        name: 'dcnt_obs'
+                    },
+                    {
+                        data: 'action', sWidth: '110px', sortable: false
+                    },
+                ],
                     "language":{
                         "search":       "Buscar",
                         "lengthMenu":   "Mostrar _MENU_ registros por página",
@@ -120,8 +128,6 @@
         });
     </script>
 
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     @if (session('eliminar') == 'ok')
         <script>
             Swal.fire(
@@ -133,8 +139,8 @@
     @endif
 
     <script>
-
-        $('.formulario').submit(function(e){
+    // $('.formulario').submit(function(e){
+        $(document).on('submit','.formulario', function(e){
             e.preventDefault();
 
             Swal.fire({
@@ -152,7 +158,5 @@
             }
             })
         });
-
-        
     </script>
 @stop

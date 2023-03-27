@@ -29,6 +29,7 @@
                                     <th>N°</th>
                                     <th>DNI</th>
                                     <th>APELLIDO Y NOMBRES</th>
+                                    <th>CARGO</th>
                                     <th>INSTITUCION</th>
                                     <th>CAJA N°</th>
                                     <th>OBSERVACIONES</th>
@@ -36,35 +37,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($docentes as $docente)
-                                    <tr>
-                                        <td> {{ $loop->iteration }}</td>
-                                        {{-- dni --}}
-                                        <td>{{ $docente->dcnt_dni }}</td>
-                                        {{-- apellidos y nombres --}}
-                                        <td>{{ $docente->dcnt_apell1 }} {{ $docente->dcnt_apell2 }} {{ $docente->dcnt_name }}</td>
-                                        {{-- institucion --}}
-                                        <td>{{ $docente->tipo_inst }} {{ $docente->inst_name }} - {{ $docente->inst_lugar }}</td>
-                                        {{-- caja --}}
-                                        <td>{{ $docente->caja_num_let}}</td>
-                                        {{-- observaciones --}}
-                                        <td>
-                                            @if(empty($docente->dcnt_obs))
-                                                -
-                                            @else
-                                                {{ $docente->dcnt_obs }}
-                                            @endif
-                                        </td>
-                                        <td width="110px">
-                                            <form action="{{route('doconte_eliminar', $docente->id_dcnt)}}" method="POST" class="formulario">
-                                                @csrf
-                                                @method('delete')
-                                                <a href="{{route('editar', $docente->id_dcnt)}}" class="btn btn-warning btn-sm"> <i class="fas fa-pen"></i> </a>&nbsp<a href="{{route('docente_detalles', $docente->id_dcnt)}}" class="btn btn-primary btn-sm"><i class="fas fa-table"></i> </a>
-                                                <button type="submit" class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i> </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -88,11 +60,46 @@
     <script src="{{ asset('resources/jquery351/jquery-3.5.1.js')}}"></script>
     <script src="{{ asset('resources/datatable/jquery.dataTables.min.js')}}"></script>
     <script src="{{ asset('resources/datatable/dataTables.bootstrap5.min.js')}}"></script>
+    <script src="{{ asset('resources/sweetalert/sweetalert2@11.js')}}"></script>
 
     <script>
         $(document).ready(function () {
             $('#registro').DataTable(
                 {
+                processing: true,
+                serverSide: true,
+                ajax: "{{route('activos_list_ops')}}",
+                columns: [
+                    {
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex', orderable: true, searchable: true
+                    },
+                    {
+                        data: 'dcnt_dni',
+                        name: 'dcnt_dni'
+                    },
+                    {
+                        data: 'nombres',
+                    },
+                    {
+                        data: 'car_name',
+                        name: 'car_name'
+                    },
+                    {
+                        data: 'institucion',
+                    },
+                    {
+                        data: 'caja_num_let',
+                        name: 'caja_num_let'
+                    },
+                    {
+                        data: 'dcnt_obs',
+                        name: 'dcnt_obs'
+                    },
+                    {
+                        data: 'action', sWidth: '110px', sortable: false
+                    },
+                ],
                     "language":{
                         "search":       "Buscar",
                         "lengthMenu":   "Mostrar _MENU_ registros por página",
@@ -110,8 +117,6 @@
         });
     </script>
 
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     @if (session('eliminar') == 'ok')
         <script>
             Swal.fire(
@@ -124,9 +129,9 @@
 
     <script>
 
-        $('.formulario').submit(function(e){
+        // $('.formulario').submit(function(e){
+        $(document).on('submit','.formulario', function(e){
             e.preventDefault();
-
             Swal.fire({
             title: '¿Estás seguro de eliminar al personal?',
             text: "Se eliminará al personal",

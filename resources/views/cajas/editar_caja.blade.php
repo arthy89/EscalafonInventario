@@ -6,7 +6,7 @@
        text-transform: uppercase;
     }
 </style>
-<link href="../../../resources/select2/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="{{ asset('resources/select2/select2.min.css')}}"/>
 @section('content_header')
     <br>
 @stop
@@ -144,12 +144,12 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="/css/admin_custom.css">
+    
 @stop
 
 @section('js')
-    {{-- <script> console.log('Hi!'); </script> --}}
-    <script src="../../../resources/select2/select2.min.js"></script>
+    <script src="{{ asset('resources/select2/select2.min.js')}}"></script>
+
     <script type="text/javascript">
         $(document).ready(function() {
             $('.js-example-basic-single').select2();
@@ -167,7 +167,6 @@
             $('#inst_select').select2().trigger('change');
         });
         
-    console.log({{$caja->id_inst}});
     </script>
     <script>
         function cambiar(){
