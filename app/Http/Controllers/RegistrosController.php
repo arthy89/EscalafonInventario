@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Middleware\Authenticate;
 
 use Illuminate\Http\Request;
@@ -30,240 +31,236 @@ class RegistrosController extends Controller
     {
         //
         $cajas = DB::table('caja')
-                    ->join('estado', function($join){
-                        $join->on('caja.id_est','=','estado.id_est');
-                    })
-                    ->join('institucion', function($join){
-                        $join->on('caja.id_inst','=','institucion.id_inst');
-                    })
-                    ->join('tipoinst', function($join){
-                        $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
-                    })
-                    ->select('caja.id_caja','caja.caja_num_let','caja.caja_tipo_per','estado.est_name','tipoinst.tipo_inst','institucion.inst_cod_mod','institucion.inst_name','institucion.inst_lugar','caja.caja_obs')
-                    ->orderBy('caja.caja_num_let','asc')->get();
+            ->join('estado', function ($join) {
+                $join->on('caja.id_est', '=', 'estado.id_est');
+            })
+            ->join('institucion', function ($join) {
+                $join->on('caja.id_inst', '=', 'institucion.id_inst');
+            })
+            ->join('tipoinst', function ($join) {
+                $join->on("institucion.id_tipo", "=", "tipoinst.id_tipo");
+            })
+            ->select('caja.id_caja', 'caja.caja_num_let', 'caja.caja_tipo_per', 'estado.est_name', 'tipoinst.tipo_inst', 'institucion.inst_cod_mod', 'institucion.inst_name', 'institucion.inst_lugar', 'caja.caja_obs')
+            ->orderBy('caja.caja_num_let', 'asc')->get();
 
-        // cantidad de activos 
-        $total_activos = DB::table('docente')->where('id_est',1)->count();
+        // cantidad de activos
+        $total_activos = DB::table('docente')->where('id_est', 1)->count();
 
-        // cantidad de cesantes 
-        $total_cesantes = DB::table('docente')->where('id_est',2)->count();
+        // cantidad de cesantes
+        $total_cesantes = DB::table('docente')->where('id_est', 2)->count();
 
-        // cantidad de pensionistas 
-        $total_pensionistas = DB::table('docente')->where('id_est',3)->count();
+        // cantidad de pensionistas
+        $total_pensionistas = DB::table('docente')->where('id_est', 3)->count();
 
-        // cantidad de nolegix 
-        $total_nolegix = DB::table('docente')->where('id_est',4)->count();
+        // cantidad de nolegix
+        $total_nolegix = DB::table('docente')->where('id_est', 4)->count();
 
         $total_t = DB::table('docente')->count();
 
-        return view('registros', compact('total_activos','total_cesantes','total_pensionistas','total_nolegix','total_t'));
+        return view('registros', compact('total_activos', 'total_cesantes', 'total_pensionistas', 'total_nolegix', 'total_t'));
     }
 
-    public function todo_list(Request $request){
-        if($request->ajax()){
-        $docentes = DB::table('docente')
-                ->join('cargo', function($join){
-                    $join->on('docente.id_car','=','cargo.id_car');
+    public function todo_list(Request $request)
+    {
+        if ($request->ajax()) {
+            $docentes = DB::table('docente')
+                ->join('cargo', function ($join) {
+                    $join->on('docente.id_car', '=', 'cargo.id_car');
                 })
-                ->join('estado', function($join){
-                    $join->on('docente.id_est','=','estado.id_est');
+                ->join('estado', function ($join) {
+                    $join->on('docente.id_est', '=', 'estado.id_est');
                 })
-                ->join('ley', function($join){
-                    $join->on('docente.id_ley','=','ley.id_ley');
+                ->join('ley', function ($join) {
+                    $join->on('docente.id_ley', '=', 'ley.id_ley');
                 })
-                ->join('institucion', function($join){
-                    $join->on('docente.id_inst','=','institucion.id_inst');
+                ->join('institucion', function ($join) {
+                    $join->on('docente.id_inst', '=', 'institucion.id_inst');
                 })
-                ->join('caja', function($join){
-                    $join->on('docente.id_caja','=','caja.id_caja');
+                ->join('caja', function ($join) {
+                    $join->on('docente.id_caja', '=', 'caja.id_caja');
                 })
-                ->join('tipoinst', function($join){
-                    $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
+                ->join('tipoinst', function ($join) {
+                    $join->on("institucion.id_tipo", "=", "tipoinst.id_tipo");
                 })
-                ->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
+                ->select('docente.id_dcnt', 'docente.dcnt_dni', 'docente.dcnt_name', 'docente.dcnt_apell1', 'docente.dcnt_apell2', 'docente.dcnt_fec_ces', 'docente.dcnt_rdr', 'docente.dcnt_tip_ces', 'docente.dcnt_cel', 'docente.dcnt_email', 'cargo.car_name', 'estado.est_name', 'ley.ley_num', 'ley.ley_name', 'institucion.inst_name', 'institucion.inst_lugar', 'tipoinst.tipo_inst', 'caja.caja_num_let', 'docente.dcnt_obs', 'docente.usuario')->orderBy('docente.dcnt_apell1', 'asc')->get();
             return DataTables::of($docentes)
-            ->addIndexColumn()
-            ->addColumn('nombres', function($docente){
-                return $docente->dcnt_apell1 .' '. $docente->dcnt_apell2.' '. $docente->dcnt_name ;
-            })
-            ->addColumn('institucion', function($docente){
-                return $docente->tipo_inst .' '. $docente->inst_name .' - '. $docente->inst_lugar;
-            })
-            ->addColumn('action', function($row){
-                $ruta_detalles = route('docente_detalles',$row->id_dcnt);
-                $ruta_eliminar = route('doconte_eliminar',$row->id_dcnt);
-                $ruta_editar = route('editar',$row->id_dcnt);
+                ->addIndexColumn()
+                ->addColumn('nombres', function ($docente) {
+                    return $docente->dcnt_apell1 . ' ' . $docente->dcnt_apell2 . ' ' . $docente->dcnt_name;
+                })
+                ->addColumn('institucion', function ($docente) {
+                    return $docente->tipo_inst . ' ' . $docente->inst_name . ' - ' . $docente->inst_lugar;
+                })
+                ->addColumn('action', function ($row) {
+                    $ruta_detalles = route('docente_detalles', $row->id_dcnt);
+                    $ruta_eliminar = route('doconte_eliminar', $row->id_dcnt);
+                    $ruta_editar = route('editar', $row->id_dcnt);
 
-                $form = '<form action="'.$ruta_eliminar.'" method="POST" class="formulario">
-                            '.csrf_field().'
-                            '.method_field("delete").'
-                            <a href="'.$ruta_editar.'" class="btn btn-warning btn-sm"> <i class="fas fa-pen"></i> </a>&nbsp<a href="'.$ruta_detalles.'" class="btn btn-primary btn-sm"><i class="fas fa-table"></i> </a>
-                            
+                    $form = '<form action="' . $ruta_eliminar . '" method="POST" class="formulario">
+                            ' . csrf_field() . '
+                            ' . method_field("delete") . '
+                            <a href="' . $ruta_editar . '" class="btn btn-warning btn-sm"> <i class="fas fa-pen"></i> </a>&nbsp<a href="' . $ruta_detalles . '" class="btn btn-primary btn-sm"><i class="fas fa-table"></i> </a>
+
                             <button type="submit" class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i> </button>
                         </form>';
-                return $form;
-                
-            })
-            ->rawColumns(['action'])
-            ->make(true);
+                    return $form;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
         }
 
         return view('listas.todo');
-
     }
 
     public function activos_list_ops(Request $request)
     {
-        if($request->ajax()){
-        $docentes = DB::table('docente')
-                    ->join('cargo', function($join){
-                        $join->on('docente.id_car','=','cargo.id_car');
-                    })
-                    ->join('estado', function($join){
-                        $join->on('docente.id_est','=','estado.id_est');
-                    })
-                    ->join('ley', function($join){
-                        $join->on('docente.id_ley','=','ley.id_ley');
-                    })
-                    ->join('institucion', function($join){
-                        $join->on('docente.id_inst','=','institucion.id_inst');
-                    })
-                    ->join('caja', function($join){
-                        $join->on('docente.id_caja','=','caja.id_caja');
-                    })
-                    ->join('tipoinst', function($join){
-                        $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
-                    })
-                    ->where('docente.id_est',1)->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
+        if ($request->ajax()) {
+            $docentes = DB::table('docente')
+                ->join('cargo', function ($join) {
+                    $join->on('docente.id_car', '=', 'cargo.id_car');
+                })
+                ->join('estado', function ($join) {
+                    $join->on('docente.id_est', '=', 'estado.id_est');
+                })
+                ->join('ley', function ($join) {
+                    $join->on('docente.id_ley', '=', 'ley.id_ley');
+                })
+                ->join('institucion', function ($join) {
+                    $join->on('docente.id_inst', '=', 'institucion.id_inst');
+                })
+                ->join('caja', function ($join) {
+                    $join->on('docente.id_caja', '=', 'caja.id_caja');
+                })
+                ->join('tipoinst', function ($join) {
+                    $join->on("institucion.id_tipo", "=", "tipoinst.id_tipo");
+                })
+                ->where('docente.id_est', 1)->select('docente.id_dcnt', 'docente.dcnt_dni', 'docente.dcnt_name', 'docente.dcnt_apell1', 'docente.dcnt_apell2', 'docente.dcnt_fec_ces', 'docente.dcnt_rdr', 'docente.dcnt_tip_ces', 'docente.dcnt_cel', 'docente.dcnt_email', 'cargo.car_name', 'estado.est_name', 'ley.ley_num', 'ley.ley_name', 'institucion.inst_name', 'institucion.inst_lugar', 'tipoinst.tipo_inst', 'caja.caja_num_let', 'docente.dcnt_obs', 'docente.usuario')->orderBy('docente.dcnt_apell1', 'asc')->get();
             return DataTables::of($docentes)
-            ->addIndexColumn()
-            ->addColumn('nombres', function($docente){
-                return $docente->dcnt_apell1 .' '. $docente->dcnt_apell2.' '. $docente->dcnt_name ;
-            })
-            ->addColumn('institucion', function($docente){
-                return $docente->tipo_inst .' '. $docente->inst_name .' - '. $docente->inst_lugar;
-            })
-            ->addColumn('action', function($row){
-                $ruta_detalles = route('docente_detalles',$row->id_dcnt);
-                $ruta_eliminar = route('doconte_eliminar',$row->id_dcnt);
-                $ruta_editar = route('editar',$row->id_dcnt);
+                ->addIndexColumn()
+                ->addColumn('nombres', function ($docente) {
+                    return $docente->dcnt_apell1 . ' ' . $docente->dcnt_apell2 . ' ' . $docente->dcnt_name;
+                })
+                ->addColumn('institucion', function ($docente) {
+                    return $docente->tipo_inst . ' ' . $docente->inst_name . ' - ' . $docente->inst_lugar;
+                })
+                ->addColumn('action', function ($row) {
+                    $ruta_detalles = route('docente_detalles', $row->id_dcnt);
+                    $ruta_eliminar = route('doconte_eliminar', $row->id_dcnt);
+                    $ruta_editar = route('editar', $row->id_dcnt);
 
-                $form = '<form action="'.$ruta_eliminar.'" method="POST" class="formulario">
-                            '.csrf_field().'
-                            '.method_field("delete").'
-                            <a href="'.$ruta_editar.'" class="btn btn-warning btn-sm"> <i class="fas fa-pen"></i> </a>&nbsp<a href="'.$ruta_detalles.'" class="btn btn-primary btn-sm"><i class="fas fa-table"></i> </a>
-                            
+                    $form = '<form action="' . $ruta_eliminar . '" method="POST" class="formulario">
+                            ' . csrf_field() . '
+                            ' . method_field("delete") . '
+                            <a href="' . $ruta_editar . '" class="btn btn-warning btn-sm"> <i class="fas fa-pen"></i> </a>&nbsp<a href="' . $ruta_detalles . '" class="btn btn-primary btn-sm"><i class="fas fa-table"></i> </a>
+
                             <button type="submit" class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i> </button>
                         </form>';
-                return $form;
-                
-            })
-            ->rawColumns(['action'])
-            ->make(true);
+                    return $form;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
         }
         return view('listas.activos.lista_ops');
     }
 
     public function cesantes_list_ops(Request $request)
     {
-        if($request->ajax()){
-        $docentes = DB::table('docente')
-                    ->join('cargo', function($join){
-                        $join->on('docente.id_car','=','cargo.id_car');
-                    })
-                    ->join('estado', function($join){
-                        $join->on('docente.id_est','=','estado.id_est');
-                    })
-                    ->join('ley', function($join){
-                        $join->on('docente.id_ley','=','ley.id_ley');
-                    })
-                    ->join('institucion', function($join){
-                        $join->on('docente.id_inst','=','institucion.id_inst');
-                    })
-                    ->join('caja', function($join){
-                        $join->on('docente.id_caja','=','caja.id_caja');
-                    })
-                    ->join('tipoinst', function($join){
-                        $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
-                    })
-                    ->where('docente.id_est',2)->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
+        if ($request->ajax()) {
+            $docentes = DB::table('docente')
+                ->join('cargo', function ($join) {
+                    $join->on('docente.id_car', '=', 'cargo.id_car');
+                })
+                ->join('estado', function ($join) {
+                    $join->on('docente.id_est', '=', 'estado.id_est');
+                })
+                ->join('ley', function ($join) {
+                    $join->on('docente.id_ley', '=', 'ley.id_ley');
+                })
+                ->join('institucion', function ($join) {
+                    $join->on('docente.id_inst', '=', 'institucion.id_inst');
+                })
+                ->join('caja', function ($join) {
+                    $join->on('docente.id_caja', '=', 'caja.id_caja');
+                })
+                ->join('tipoinst', function ($join) {
+                    $join->on("institucion.id_tipo", "=", "tipoinst.id_tipo");
+                })
+                ->where('docente.id_est', 2)->select('docente.id_dcnt', 'docente.dcnt_dni', 'docente.dcnt_name', 'docente.dcnt_apell1', 'docente.dcnt_apell2', 'docente.dcnt_fec_ces', 'docente.dcnt_rdr', 'docente.dcnt_tip_ces', 'docente.dcnt_cel', 'docente.dcnt_email', 'cargo.car_name', 'estado.est_name', 'ley.ley_num', 'ley.ley_name', 'institucion.inst_name', 'institucion.inst_lugar', 'tipoinst.tipo_inst', 'caja.caja_num_let', 'docente.dcnt_obs', 'docente.usuario')->orderBy('docente.dcnt_apell1', 'asc')->get();
             return DataTables::of($docentes)
-            ->addIndexColumn()
-            ->addColumn('nombres', function($docente){
-                return $docente->dcnt_apell1 .' '. $docente->dcnt_apell2.' '. $docente->dcnt_name ;
-            })
-            ->addColumn('institucion', function($docente){
-                return $docente->tipo_inst .' '. $docente->inst_name .' - '. $docente->inst_lugar;
-            })
-            ->addColumn('action', function($row){
-                $ruta_detalles = route('docente_detalles',$row->id_dcnt);
-                $ruta_eliminar = route('doconte_eliminar',$row->id_dcnt);
-                $ruta_editar = route('editar',$row->id_dcnt);
+                ->addIndexColumn()
+                ->addColumn('nombres', function ($docente) {
+                    return $docente->dcnt_apell1 . ' ' . $docente->dcnt_apell2 . ' ' . $docente->dcnt_name;
+                })
+                ->addColumn('institucion', function ($docente) {
+                    return $docente->tipo_inst . ' ' . $docente->inst_name . ' - ' . $docente->inst_lugar;
+                })
+                ->addColumn('action', function ($row) {
+                    $ruta_detalles = route('docente_detalles', $row->id_dcnt);
+                    $ruta_eliminar = route('doconte_eliminar', $row->id_dcnt);
+                    $ruta_editar = route('editar', $row->id_dcnt);
 
-                $form = '<form action="'.$ruta_eliminar.'" method="POST" class="formulario">
-                            '.csrf_field().'
-                            '.method_field("delete").'
-                            <a href="'.$ruta_editar.'" class="btn btn-warning btn-sm"> <i class="fas fa-pen"></i> </a>&nbsp<a href="'.$ruta_detalles.'" class="btn btn-primary btn-sm"><i class="fas fa-table"></i> </a>
-                            
+                    $form = '<form action="' . $ruta_eliminar . '" method="POST" class="formulario">
+                            ' . csrf_field() . '
+                            ' . method_field("delete") . '
+                            <a href="' . $ruta_editar . '" class="btn btn-warning btn-sm"> <i class="fas fa-pen"></i> </a>&nbsp<a href="' . $ruta_detalles . '" class="btn btn-primary btn-sm"><i class="fas fa-table"></i> </a>
+
                             <button type="submit" class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i> </button>
                         </form>';
-                return $form;
-                
-            })
-            ->rawColumns(['action'])
-            ->make(true);
+                    return $form;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
         }
         return view('listas.cesantes.lista_ops');
     }
 
     public function pensionistas_list_ops(Request $request)
     {
-        if($request->ajax()){
-        $docentes = DB::table('docente')
-                    ->join('cargo', function($join){
-                        $join->on('docente.id_car','=','cargo.id_car');
-                    })
-                    ->join('estado', function($join){
-                        $join->on('docente.id_est','=','estado.id_est');
-                    })
-                    ->join('ley', function($join){
-                        $join->on('docente.id_ley','=','ley.id_ley');
-                    })
-                    ->join('institucion', function($join){
-                        $join->on('docente.id_inst','=','institucion.id_inst');
-                    })
-                    ->join('caja', function($join){
-                        $join->on('docente.id_caja','=','caja.id_caja');
-                    })
-                    ->join('tipoinst', function($join){
-                        $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
-                    })
-                    ->where('docente.id_est',3)->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
+        if ($request->ajax()) {
+            $docentes = DB::table('docente')
+                ->join('cargo', function ($join) {
+                    $join->on('docente.id_car', '=', 'cargo.id_car');
+                })
+                ->join('estado', function ($join) {
+                    $join->on('docente.id_est', '=', 'estado.id_est');
+                })
+                ->join('ley', function ($join) {
+                    $join->on('docente.id_ley', '=', 'ley.id_ley');
+                })
+                ->join('institucion', function ($join) {
+                    $join->on('docente.id_inst', '=', 'institucion.id_inst');
+                })
+                ->join('caja', function ($join) {
+                    $join->on('docente.id_caja', '=', 'caja.id_caja');
+                })
+                ->join('tipoinst', function ($join) {
+                    $join->on("institucion.id_tipo", "=", "tipoinst.id_tipo");
+                })
+                ->where('docente.id_est', 3)->select('docente.id_dcnt', 'docente.dcnt_dni', 'docente.dcnt_name', 'docente.dcnt_apell1', 'docente.dcnt_apell2', 'docente.dcnt_fec_ces', 'docente.dcnt_rdr', 'docente.dcnt_tip_ces', 'docente.dcnt_cel', 'docente.dcnt_email', 'cargo.car_name', 'estado.est_name', 'ley.ley_num', 'ley.ley_name', 'institucion.inst_name', 'institucion.inst_lugar', 'tipoinst.tipo_inst', 'caja.caja_num_let', 'docente.dcnt_obs', 'docente.usuario')->orderBy('docente.dcnt_apell1', 'asc')->get();
             return DataTables::of($docentes)
-            ->addIndexColumn()
-            ->addColumn('nombres', function($docente){
-                return $docente->dcnt_apell1 .' '. $docente->dcnt_apell2.' '. $docente->dcnt_name ;
-            })
-            ->addColumn('institucion', function($docente){
-                return $docente->tipo_inst .' '. $docente->inst_name .' - '. $docente->inst_lugar;
-            })
-            ->addColumn('action', function($row){
-                $ruta_detalles = route('docente_detalles',$row->id_dcnt);
-                $ruta_eliminar = route('doconte_eliminar',$row->id_dcnt);
-                $ruta_editar = route('editar',$row->id_dcnt);
+                ->addIndexColumn()
+                ->addColumn('nombres', function ($docente) {
+                    return $docente->dcnt_apell1 . ' ' . $docente->dcnt_apell2 . ' ' . $docente->dcnt_name;
+                })
+                ->addColumn('institucion', function ($docente) {
+                    return $docente->tipo_inst . ' ' . $docente->inst_name . ' - ' . $docente->inst_lugar;
+                })
+                ->addColumn('action', function ($row) {
+                    $ruta_detalles = route('docente_detalles', $row->id_dcnt);
+                    $ruta_eliminar = route('doconte_eliminar', $row->id_dcnt);
+                    $ruta_editar = route('editar', $row->id_dcnt);
 
-                $form = '<form action="'.$ruta_eliminar.'" method="POST" class="formulario">
-                            '.csrf_field().'
-                            '.method_field("delete").'
-                            <a href="'.$ruta_editar.'" class="btn btn-warning btn-sm"> <i class="fas fa-pen"></i> </a>&nbsp<a href="'.$ruta_detalles.'" class="btn btn-primary btn-sm"><i class="fas fa-table"></i> </a>
-                            
+                    $form = '<form action="' . $ruta_eliminar . '" method="POST" class="formulario">
+                            ' . csrf_field() . '
+                            ' . method_field("delete") . '
+                            <a href="' . $ruta_editar . '" class="btn btn-warning btn-sm"> <i class="fas fa-pen"></i> </a>&nbsp<a href="' . $ruta_detalles . '" class="btn btn-primary btn-sm"><i class="fas fa-table"></i> </a>
+
                             <button type="submit" class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i> </button>
                         </form>';
-                return $form;
-                
-            })
-            ->rawColumns(['action'])
-            ->make(true);
+                    return $form;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
         }
 
         return view('listas.pensionistas.lista_ops');
@@ -271,52 +268,51 @@ class RegistrosController extends Controller
 
     public function nolegix_list_ops(Request $request)
     {
-        if($request->ajax()){
-        $docentes = DB::table('docente')
-                    ->join('cargo', function($join){
-                        $join->on('docente.id_car','=','cargo.id_car');
-                    })
-                    ->join('estado', function($join){
-                        $join->on('docente.id_est','=','estado.id_est');
-                    })
-                    ->join('ley', function($join){
-                        $join->on('docente.id_ley','=','ley.id_ley');
-                    })
-                    ->join('institucion', function($join){
-                        $join->on('docente.id_inst','=','institucion.id_inst');
-                    })
-                    ->join('caja', function($join){
-                        $join->on('docente.id_caja','=','caja.id_caja');
-                    })
-                    ->join('tipoinst', function($join){
-                        $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
-                    })
-                    ->where('docente.id_est',4)->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
+        if ($request->ajax()) {
+            $docentes = DB::table('docente')
+                ->join('cargo', function ($join) {
+                    $join->on('docente.id_car', '=', 'cargo.id_car');
+                })
+                ->join('estado', function ($join) {
+                    $join->on('docente.id_est', '=', 'estado.id_est');
+                })
+                ->join('ley', function ($join) {
+                    $join->on('docente.id_ley', '=', 'ley.id_ley');
+                })
+                ->join('institucion', function ($join) {
+                    $join->on('docente.id_inst', '=', 'institucion.id_inst');
+                })
+                ->join('caja', function ($join) {
+                    $join->on('docente.id_caja', '=', 'caja.id_caja');
+                })
+                ->join('tipoinst', function ($join) {
+                    $join->on("institucion.id_tipo", "=", "tipoinst.id_tipo");
+                })
+                ->where('docente.id_est', 4)->select('docente.id_dcnt', 'docente.dcnt_dni', 'docente.dcnt_name', 'docente.dcnt_apell1', 'docente.dcnt_apell2', 'docente.dcnt_fec_ces', 'docente.dcnt_rdr', 'docente.dcnt_tip_ces', 'docente.dcnt_cel', 'docente.dcnt_email', 'cargo.car_name', 'estado.est_name', 'ley.ley_num', 'ley.ley_name', 'institucion.inst_name', 'institucion.inst_lugar', 'tipoinst.tipo_inst', 'caja.caja_num_let', 'docente.dcnt_obs', 'docente.usuario')->orderBy('docente.dcnt_apell1', 'asc')->get();
             return DataTables::of($docentes)
-            ->addIndexColumn()
-            ->addColumn('nombres', function($docente){
-                return $docente->dcnt_apell1 .' '. $docente->dcnt_apell2.' '. $docente->dcnt_name ;
-            })
-            ->addColumn('institucion', function($docente){
-                return $docente->tipo_inst .' '. $docente->inst_name .' - '. $docente->inst_lugar;
-            })
-            ->addColumn('action', function($row){
-                $ruta_detalles = route('docente_detalles',$row->id_dcnt);
-                $ruta_eliminar = route('doconte_eliminar',$row->id_dcnt);
-                $ruta_editar = route('editar',$row->id_dcnt);
+                ->addIndexColumn()
+                ->addColumn('nombres', function ($docente) {
+                    return $docente->dcnt_apell1 . ' ' . $docente->dcnt_apell2 . ' ' . $docente->dcnt_name;
+                })
+                ->addColumn('institucion', function ($docente) {
+                    return $docente->tipo_inst . ' ' . $docente->inst_name . ' - ' . $docente->inst_lugar;
+                })
+                ->addColumn('action', function ($row) {
+                    $ruta_detalles = route('docente_detalles', $row->id_dcnt);
+                    $ruta_eliminar = route('doconte_eliminar', $row->id_dcnt);
+                    $ruta_editar = route('editar', $row->id_dcnt);
 
-                $form = '<form action="'.$ruta_eliminar.'" method="POST" class="formulario">
-                            '.csrf_field().'
-                            '.method_field("delete").'
-                            <a href="'.$ruta_editar.'" class="btn btn-warning btn-sm"> <i class="fas fa-pen"></i> </a>&nbsp<a href="'.$ruta_detalles.'" class="btn btn-primary btn-sm"><i class="fas fa-table"></i> </a>
-                            
+                    $form = '<form action="' . $ruta_eliminar . '" method="POST" class="formulario">
+                            ' . csrf_field() . '
+                            ' . method_field("delete") . '
+                            <a href="' . $ruta_editar . '" class="btn btn-warning btn-sm"> <i class="fas fa-pen"></i> </a>&nbsp<a href="' . $ruta_detalles . '" class="btn btn-primary btn-sm"><i class="fas fa-table"></i> </a>
+
                             <button type="submit" class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i> </button>
                         </form>';
-                return $form;
-                
-            })
-            ->rawColumns(['action'])
-            ->make(true);
+                    return $form;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
         }
         return view('listas.nolegix.lista_ops');
     }
@@ -391,182 +387,180 @@ class RegistrosController extends Controller
     public function generar_pdf_todo()
     {
         $docentes = DB::table('docente')
-                    ->join('cargo', function($join){
-                        $join->on('docente.id_car','=','cargo.id_car');
-                    })
-                    ->join('estado', function($join){
-                        $join->on('docente.id_est','=','estado.id_est');
-                    })
-                    ->join('ley', function($join){
-                        $join->on('docente.id_ley','=','ley.id_ley');
-                    })
-                    ->join('institucion', function($join){
-                        $join->on('docente.id_inst','=','institucion.id_inst');
-                    })
-                    ->join('caja', function($join){
-                        $join->on('docente.id_caja','=','caja.id_caja');
-                    })
-                    ->join('tipoinst', function($join){
-                        $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
-                    })
-                    ->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.id_caja','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
+            ->join('cargo', function ($join) {
+                $join->on('docente.id_car', '=', 'cargo.id_car');
+            })
+            ->join('estado', function ($join) {
+                $join->on('docente.id_est', '=', 'estado.id_est');
+            })
+            ->join('ley', function ($join) {
+                $join->on('docente.id_ley', '=', 'ley.id_ley');
+            })
+            ->join('institucion', function ($join) {
+                $join->on('docente.id_inst', '=', 'institucion.id_inst');
+            })
+            ->join('caja', function ($join) {
+                $join->on('docente.id_caja', '=', 'caja.id_caja');
+            })
+            ->join('tipoinst', function ($join) {
+                $join->on("institucion.id_tipo", "=", "tipoinst.id_tipo");
+            })
+            ->select('docente.id_dcnt', 'docente.dcnt_dni', 'docente.dcnt_name', 'docente.dcnt_apell1', 'docente.dcnt_apell2', 'docente.dcnt_fec_ces', 'docente.dcnt_rdr', 'docente.dcnt_tip_ces', 'docente.dcnt_cel', 'docente.dcnt_email', 'cargo.car_name', 'estado.est_name', 'ley.ley_num', 'ley.ley_name', 'institucion.inst_name', 'institucion.inst_lugar', 'tipoinst.tipo_inst', 'caja.id_caja', 'caja.caja_num_let', 'docente.dcnt_obs', 'docente.usuario')->orderBy('docente.dcnt_apell1', 'asc')->get();
 
         $pdf = Pdf::loadView('pdf.descargar_pdf_todo', array('docentes' => $docentes));
 
-        return $pdf->stream("Lista General.pdf", [ "Attachment" => true]);
+        return $pdf->stream("Lista General.pdf", ["Attachment" => true]);
     }
 
     // ACTIVOS
     public function generar_pdf()
     {
         $docentes = DB::table('docente')
-                    ->join('cargo', function($join){
-                        $join->on('docente.id_car','=','cargo.id_car');
-                    })
-                    ->join('estado', function($join){
-                        $join->on('docente.id_est','=','estado.id_est');
-                    })
-                    ->join('ley', function($join){
-                        $join->on('docente.id_ley','=','ley.id_ley');
-                    })
-                    ->join('institucion', function($join){
-                        $join->on('docente.id_inst','=','institucion.id_inst');
-                    })
-                    ->join('caja', function($join){
-                        $join->on('docente.id_caja','=','caja.id_caja');
-                    })
-                    ->join('tipoinst', function($join){
-                        $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
-                    })
-                    ->where('docente.id_est',1)->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.id_caja','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
+            ->join('cargo', function ($join) {
+                $join->on('docente.id_car', '=', 'cargo.id_car');
+            })
+            ->join('estado', function ($join) {
+                $join->on('docente.id_est', '=', 'estado.id_est');
+            })
+            ->join('ley', function ($join) {
+                $join->on('docente.id_ley', '=', 'ley.id_ley');
+            })
+            ->join('institucion', function ($join) {
+                $join->on('docente.id_inst', '=', 'institucion.id_inst');
+            })
+            ->join('caja', function ($join) {
+                $join->on('docente.id_caja', '=', 'caja.id_caja');
+            })
+            ->join('tipoinst', function ($join) {
+                $join->on("institucion.id_tipo", "=", "tipoinst.id_tipo");
+            })
+            ->where('docente.id_est', 1)->select('docente.id_dcnt', 'docente.dcnt_dni', 'docente.dcnt_name', 'docente.dcnt_apell1', 'docente.dcnt_apell2', 'docente.dcnt_fec_ces', 'docente.dcnt_rdr', 'docente.dcnt_tip_ces', 'docente.dcnt_cel', 'docente.dcnt_email', 'cargo.car_name', 'estado.est_name', 'ley.ley_num', 'ley.ley_name', 'institucion.inst_name', 'institucion.inst_lugar', 'tipoinst.tipo_inst', 'caja.id_caja', 'caja.caja_num_let', 'docente.dcnt_obs', 'docente.usuario')->orderBy('docente.dcnt_apell1', 'asc')->get();
 
         $cajas = DB::table('caja')
-                    ->join('estado', function($join){
-                        $join->on('caja.id_est','=','estado.id_est');
-                    })
-                    ->join('institucion', function($join){
-                        $join->on('caja.id_inst','=','institucion.id_inst');
-                    })
-                    ->join('tipoinst', function($join){
-                        $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
-                    })
-                    ->where('caja.id_est',1)->select('caja.id_caja','caja.caja_num_let','caja.caja_tipo_per','estado.est_name','tipoinst.tipo_inst','institucion.inst_cod_mod','institucion.inst_name','institucion.inst_lugar','caja.caja_obs')
-                    ->orderBy('caja.caja_num_let','asc')->get();
+            ->join('estado', function ($join) {
+                $join->on('caja.id_est', '=', 'estado.id_est');
+            })
+            ->join('institucion', function ($join) {
+                $join->on('caja.id_inst', '=', 'institucion.id_inst');
+            })
+            ->join('tipoinst', function ($join) {
+                $join->on("institucion.id_tipo", "=", "tipoinst.id_tipo");
+            })
+            ->where('caja.id_est', 1)->select('caja.id_caja', 'caja.caja_num_let', 'caja.caja_tipo_per', 'estado.est_name', 'tipoinst.tipo_inst', 'institucion.inst_cod_mod', 'institucion.inst_name', 'institucion.inst_lugar', 'caja.caja_obs')
+            ->orderBy('caja.caja_num_let', 'asc')->get();
 
         $pdf = Pdf::loadView('pdf.descargar_pdf', array('cajas' => $cajas, 'docentes' => $docentes));
 
-        return $pdf->stream("Lista Activos.pdf", [ "Attachment" => true]);
+        return $pdf->stream("Lista Activos.pdf", ["Attachment" => true]);
     }
 
     public function generar_pdf_cesantes()
     {
         $docentes = DB::table('docente')
-                    ->join('cargo', function($join){
-                        $join->on('docente.id_car','=','cargo.id_car');
-                    })
-                    ->join('estado', function($join){
-                        $join->on('docente.id_est','=','estado.id_est');
-                    })
-                    ->join('ley', function($join){
-                        $join->on('docente.id_ley','=','ley.id_ley');
-                    })
-                    ->join('institucion', function($join){
-                        $join->on('docente.id_inst','=','institucion.id_inst');
-                    })
-                    ->join('caja', function($join){
-                        $join->on('docente.id_caja','=','caja.id_caja');
-                    })
-                    ->join('tipoinst', function($join){
-                        $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
-                    })
-                    ->where('docente.id_est',2)->select('docente.id_caja','docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.id_caja','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
+            ->join('cargo', function ($join) {
+                $join->on('docente.id_car', '=', 'cargo.id_car');
+            })
+            ->join('estado', function ($join) {
+                $join->on('docente.id_est', '=', 'estado.id_est');
+            })
+            ->join('ley', function ($join) {
+                $join->on('docente.id_ley', '=', 'ley.id_ley');
+            })
+            ->join('institucion', function ($join) {
+                $join->on('docente.id_inst', '=', 'institucion.id_inst');
+            })
+            ->join('caja', function ($join) {
+                $join->on('docente.id_caja', '=', 'caja.id_caja');
+            })
+            ->join('tipoinst', function ($join) {
+                $join->on("institucion.id_tipo", "=", "tipoinst.id_tipo");
+            })
+            ->where('docente.id_est', 2)->select('docente.id_caja', 'docente.id_dcnt', 'docente.dcnt_dni', 'docente.dcnt_name', 'docente.dcnt_apell1', 'docente.dcnt_apell2', 'docente.dcnt_fec_ces', 'docente.dcnt_rdr', 'docente.dcnt_tip_ces', 'docente.dcnt_cel', 'docente.dcnt_email', 'cargo.car_name', 'estado.est_name', 'ley.ley_num', 'ley.ley_name', 'institucion.inst_name', 'institucion.inst_lugar', 'tipoinst.tipo_inst', 'caja.id_caja', 'caja.caja_num_let', 'docente.dcnt_obs', 'docente.usuario')->orderBy('docente.dcnt_apell1', 'asc')->get();
 
         $cajas = DB::table('caja')
-                    ->join('estado', function($join){
-                        $join->on('caja.id_est','=','estado.id_est');
-                    })
-                    ->where('caja.id_est',2)->select('caja.id_caja','caja.caja_num_let','caja.caja_tipo_per','estado.est_name','caja.caja_obs')
-                    ->orderBy('caja.caja_num_let','asc')->get();
-        return $docentes;
-        return view('pdf.descargar_pdf_cesantes', compact('cajas', 'docentes'));
+            ->join('estado', function ($join) {
+                $join->on('caja.id_est', '=', 'estado.id_est');
+            })
+            ->where('caja.id_est', 2)->select('caja.id_caja', 'caja.caja_num_let', 'caja.caja_tipo_per', 'estado.est_name', 'caja.caja_obs')
+            ->orderBy('caja.caja_num_let', 'asc')->get();
+        // return $docentes;
+        // return view('pdf.descargar_pdf_cesantes', compact('cajas', 'docentes'));
 
         $pdf = Pdf::loadView('pdf.descargar_pdf_cesantes', array('cajas' => $cajas, 'docentes' => $docentes));
         $pdf->set_paper("A4", "landscape");
 
-        // return $docentes;
-
-        return $pdf->stream("Lista Cesantes.pdf", [ "Attachment" => true]);
+        return $pdf->stream("Lista Cesantes.pdf", ["Attachment" => true]);
     }
 
     public function generar_pdf_pensionistas()
     {
         $docentes = DB::table('docente')
-                    ->join('cargo', function($join){
-                        $join->on('docente.id_car','=','cargo.id_car');
-                    })
-                    ->join('estado', function($join){
-                        $join->on('docente.id_est','=','estado.id_est');
-                    })
-                    ->join('ley', function($join){
-                        $join->on('docente.id_ley','=','ley.id_ley');
-                    })
-                    ->join('institucion', function($join){
-                        $join->on('docente.id_inst','=','institucion.id_inst');
-                    })
-                    ->join('caja', function($join){
-                        $join->on('docente.id_caja','=','caja.id_caja');
-                    })
-                    ->join('tipoinst', function($join){
-                        $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
-                    })
-                    ->where('docente.id_est',3)->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.id_caja','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
+            ->join('cargo', function ($join) {
+                $join->on('docente.id_car', '=', 'cargo.id_car');
+            })
+            ->join('estado', function ($join) {
+                $join->on('docente.id_est', '=', 'estado.id_est');
+            })
+            ->join('ley', function ($join) {
+                $join->on('docente.id_ley', '=', 'ley.id_ley');
+            })
+            ->join('institucion', function ($join) {
+                $join->on('docente.id_inst', '=', 'institucion.id_inst');
+            })
+            ->join('caja', function ($join) {
+                $join->on('docente.id_caja', '=', 'caja.id_caja');
+            })
+            ->join('tipoinst', function ($join) {
+                $join->on("institucion.id_tipo", "=", "tipoinst.id_tipo");
+            })
+            ->where('docente.id_est', 3)->select('docente.id_dcnt', 'docente.dcnt_dni', 'docente.dcnt_name', 'docente.dcnt_apell1', 'docente.dcnt_apell2', 'docente.dcnt_fec_ces', 'docente.dcnt_rdr', 'docente.dcnt_tip_ces', 'docente.dcnt_cel', 'docente.dcnt_email', 'cargo.car_name', 'estado.est_name', 'ley.ley_num', 'ley.ley_name', 'institucion.inst_name', 'institucion.inst_lugar', 'tipoinst.tipo_inst', 'caja.id_caja', 'caja.caja_num_let', 'docente.dcnt_obs', 'docente.usuario')->orderBy('docente.dcnt_apell1', 'asc')->get();
 
         $cajas = DB::table('caja')
-                    ->join('estado', function($join){
-                        $join->on('caja.id_est','=','estado.id_est');
-                    })
-                    ->where('caja.id_est',3)->select('caja.id_caja','caja.caja_num_let','caja.caja_tipo_per','estado.est_name','caja.caja_obs')
-                    ->orderBy('caja.caja_num_let','asc')->get();
+            ->join('estado', function ($join) {
+                $join->on('caja.id_est', '=', 'estado.id_est');
+            })
+            ->where('caja.id_est', 3)->select('caja.id_caja', 'caja.caja_num_let', 'caja.caja_tipo_per', 'estado.est_name', 'caja.caja_obs')
+            ->orderBy('caja.caja_num_let', 'asc')->get();
 
         $pdf = Pdf::loadView('pdf.descargar_pdf_pensionistas', array('cajas' => $cajas, 'docentes' => $docentes));
         $pdf->set_paper("A4", "landscape");
 
-        return $pdf->stream("Lista Pensionistas.pdf", [ "Attachment" => true]);
+        return $pdf->stream("Lista Pensionistas.pdf", ["Attachment" => true]);
     }
 
     public function generar_pdf_nolegix()
     {
         $docentes = DB::table('docente')
-                    ->join('cargo', function($join){
-                        $join->on('docente.id_car','=','cargo.id_car');
-                    })
-                    ->join('estado', function($join){
-                        $join->on('docente.id_est','=','estado.id_est');
-                    })
-                    ->join('ley', function($join){
-                        $join->on('docente.id_ley','=','ley.id_ley');
-                    })
-                    ->join('institucion', function($join){
-                        $join->on('docente.id_inst','=','institucion.id_inst');
-                    })
-                    ->join('caja', function($join){
-                        $join->on('docente.id_caja','=','caja.id_caja');
-                    })
-                    ->join('tipoinst', function($join){
-                        $join->on("institucion.id_tipo","=","tipoinst.id_tipo");
-                    })
-                    ->where('docente.id_est',4)->select('docente.id_dcnt','docente.dcnt_dni','docente.dcnt_name','docente.dcnt_apell1','docente.dcnt_apell2','docente.dcnt_fec_ces','docente.dcnt_rdr','docente.dcnt_tip_ces','docente.dcnt_cel','docente.dcnt_email','cargo.car_name','estado.est_name','ley.ley_num','ley.ley_name','institucion.inst_name','institucion.inst_lugar','tipoinst.tipo_inst','caja.id_caja','caja.caja_num_let','docente.dcnt_obs','docente.usuario')->orderBy('docente.dcnt_apell1','asc')->get();
+            ->join('cargo', function ($join) {
+                $join->on('docente.id_car', '=', 'cargo.id_car');
+            })
+            ->join('estado', function ($join) {
+                $join->on('docente.id_est', '=', 'estado.id_est');
+            })
+            ->join('ley', function ($join) {
+                $join->on('docente.id_ley', '=', 'ley.id_ley');
+            })
+            ->join('institucion', function ($join) {
+                $join->on('docente.id_inst', '=', 'institucion.id_inst');
+            })
+            ->join('caja', function ($join) {
+                $join->on('docente.id_caja', '=', 'caja.id_caja');
+            })
+            ->join('tipoinst', function ($join) {
+                $join->on("institucion.id_tipo", "=", "tipoinst.id_tipo");
+            })
+            ->where('docente.id_est', 4)->select('docente.id_dcnt', 'docente.dcnt_dni', 'docente.dcnt_name', 'docente.dcnt_apell1', 'docente.dcnt_apell2', 'docente.dcnt_fec_ces', 'docente.dcnt_rdr', 'docente.dcnt_tip_ces', 'docente.dcnt_cel', 'docente.dcnt_email', 'cargo.car_name', 'estado.est_name', 'ley.ley_num', 'ley.ley_name', 'institucion.inst_name', 'institucion.inst_lugar', 'tipoinst.tipo_inst', 'caja.id_caja', 'caja.caja_num_let', 'docente.dcnt_obs', 'docente.usuario')->orderBy('docente.dcnt_apell1', 'asc')->get();
 
         $cajas = DB::table('caja')
-                    ->join('estado', function($join){
-                        $join->on('caja.id_est','=','estado.id_est');
-                    })
-                    ->where('caja.id_est',4)->select('caja.id_caja','caja.caja_num_let','caja.caja_tipo_per','estado.est_name','caja.caja_obs')
-                    ->orderBy('caja.caja_num_let','asc')->get();
+            ->join('estado', function ($join) {
+                $join->on('caja.id_est', '=', 'estado.id_est');
+            })
+            ->where('caja.id_est', 4)->select('caja.id_caja', 'caja.caja_num_let', 'caja.caja_tipo_per', 'estado.est_name', 'caja.caja_obs')
+            ->orderBy('caja.caja_num_let', 'asc')->get();
 
         $pdf = Pdf::loadView('pdf.descargar_pdf_nolegix', array('cajas' => $cajas, 'docentes' => $docentes));
         $pdf->set_paper("A4", "landscape");
 
-        return $pdf->stream("Lista No Legix.pdf", [ "Attachment" => true]);
+        return $pdf->stream("Lista No Legix.pdf", ["Attachment" => true]);
     }
 }
