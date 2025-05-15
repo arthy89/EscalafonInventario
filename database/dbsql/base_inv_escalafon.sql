@@ -11,7 +11,7 @@
  Target Server Version : 80030 (8.0.30)
  File Encoding         : 65001
 
- Date: 04/05/2025 12:45:00
+ Date: 04/05/2025 13:00:13
 */
 
 SET NAMES utf8mb4;
@@ -309,11 +309,6 @@ CREATE TABLE `users`  (
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES (1, 'Arhyel Ramos', 'arhyel.860@gmail.com', NULL, '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'mEdFKH9rbzbIVqlxG9Fa0kAkvvgdc5y46tw10E1RoOKmzX316W5ZVdw0o9Mw', '2023-01-19 15:54:57', '2023-01-19 15:54:57');
-INSERT INTO `users` VALUES (2, 'Philippe Flores', 'arhyel.8601@gmail.com', NULL, '$2y$10$jfPP1wJUfWeKfbRYS0MtwOtr9GC/SbvSoAjO1zYtRJ7FQOnNswFTu', NULL, '2023-01-20 15:31:04', '2023-01-20 15:31:04');
-INSERT INTO `users` VALUES (3, 'ALAN FERNANDEZ', 'escalafon@gmail.com', NULL, '$2y$10$F4ybiixjGsGaIfjBSgNWg.jpr1MHaZNQ/6bO.3uQH7qACs9svv.IS', NULL, '2023-02-17 16:33:35', '2023-02-17 16:33:35');
-INSERT INTO `users` VALUES (4, 'VERONICA LAURA JUAREZ', 'soyveronicalaurajuarez@gmail.com', NULL, '$2y$10$Oqwj6CcGjhy3pMSvk0HK8OuNh07xxW4ag/eur/KR5IMBIhwSc7QYK', NULL, '2023-02-17 16:47:52', '2023-02-17 16:47:52');
-INSERT INTO `users` VALUES (5, 'ELBA ROMERO', 'elba@gmail.com', NULL, '$2y$10$zCV3jxS/.of0fsZXMoPZp.m/lgotbGmomzT5E.YNIpD3v1sCj.I/.', NULL, '2023-02-17 17:59:30', '2023-02-17 17:59:30');
-INSERT INTO `users` VALUES (6, 'Hector Arturo Mullisaca Jaen', 'mullisaca.jaen@gmail.com', NULL, '$2y$10$8qSYbmrQZBiJuuthTt/saOakCWTFLLmFW8co9KjsTpw6WGJbYH2sW', NULL, '2023-03-13 15:01:13', '2023-03-13 15:01:13');
+INSERT INTO `users` VALUES (1, 'Admin', 'password@gmail.com', NULL, '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'mEdFKH9rbzbIVqlxG9Fa0kAkvvgdc5y46tw10E1RoOKmzX316W5ZVdw0o9Mw', '2023-01-19 15:54:57', '2023-01-19 15:54:57');
 
 SET FOREIGN_KEY_CHECKS = 1;
